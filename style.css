@@ -1,0 +1,50 @@
+html{
+	height: 94%;
+}
+body{
+	height: 100%;
+}
+#top{
+	height: 10%;
+	border: 1px solid #000;
+ 	border-bottom: 0px;
+}
+#left{
+	width: 200px;
+	height: 90%;
+	border: 1px solid #000;
+	/*border-right: 0px;*/
+	float: left;
+	display: inline;
+	overflow:auto;
+}
+#line{
+	float: left;
+	display: inline;
+	width: 0px;
+	height: 90%;
+	border: 2px solid transparent; /*透明*/
+	cursor: e-resize;
+}
+#right{
+	width: auto;
+	height: 90%;
+	border: 1px solid #000;
+	/*border-left: 0px;*/
+	overflow:auto;
+}
+.content{
+	margin: 14px;
+}
+#contextmenu{
+	min-width: 80px;
+	visibility: hidden;
+	border: 1px solid #000;
+}
+#contextmenu ul{
+	margin: 4px 7px;
+	padding: 0;
+}
+#contextmenu ul li{
+	list-style-type: none;
+}
