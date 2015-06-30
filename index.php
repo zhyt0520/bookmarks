@@ -5,8 +5,8 @@
 	<link type="text/css" rel="stylesheet" href="style.css">
 	<script type="text/javascript" src="drag.js"></script>
 	<script type="text/javascript" src="menu.js"></script>
-	<?php require 'functions.php' ?>
 	<?php require 'config.php' ?>
+	<?php require 'functions.php' ?>
 </head>
 <body>
 	<div id='top'>
@@ -14,9 +14,10 @@
 	</div>
 	<div id='left'>
 		<div class='content'>
-			<p>oqadfasdfgdssdfasdfwef</p>
-			<p>oqwadsfadsfsaef</p>
-			<p>oqwef</p>
+			<?php
+			connect_db();
+			dis_dir($conn);
+			?>
 		</div>
 	</div>
 	<div id='line'></div>
