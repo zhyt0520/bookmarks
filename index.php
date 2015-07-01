@@ -3,8 +3,7 @@
 <head>
 	<title>zhyt's bookmark.</title>
 	<link type="text/css" rel="stylesheet" href="style.css">
-	<script type="text/javascript" src="drag.js"></script>
-	<script type="text/javascript" src="menu.js"></script>
+	<script type="text/javascript" src="javascript.js"></script>
 	<?php require 'config.php' ?>
 	<?php require 'functions.php' ?>
 </head>
@@ -14,18 +13,13 @@
 	</div>
 	<div id='left'>
 		<div class='content'>
-			<?php
-			connect_db();
-			dis_dir($conn);
-			?>
+			<?php $conn=connect_db(); $res=dis_dir($conn); ?>
 		</div>
 	</div>
 	<div id='line'></div>
 	<div id='right'>
 		<div class='content'>
-			<p>oqadfasdfasdfwef</p>
-			<p>oqwadsfsdfgsdgfsdfgsdfgsdfgsdfgdsgsdgadsfsaef</p>
-			<p>oqwef</p>
+			<?php dis_url($conn,$res); ?>
 		</div>
 	</div>
 	<?php require 'contextmenu.php' ?>
