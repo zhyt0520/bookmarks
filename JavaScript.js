@@ -2,7 +2,6 @@ function $(id){
 	return document.getElementById(id)
 }
 window.onload = function(){
-
 	// 竖分隔线拖动
 	$('line').onmousedown = function(){
 		var old_width = $('left').offsetWidth;
@@ -20,7 +19,6 @@ window.onload = function(){
 	document.onmouseup = function(){
 		document.onmousemove = null;
 	}
-
 	// 右键菜单
 	document.oncontextmenu = function(){
 		// if(!event) event=window.event;
@@ -37,7 +35,10 @@ window.onload = function(){
 	document.onclick = function(){
 		$('contextmenu').style.visibility='hidden';
 	}
-
-	// 左侧目录点击后显示和隐藏
-
+}
+// 左侧目录点击后显示和隐藏子元素
+function toggle_children(self){
+		var z = self.parentNode.getElementsByTagName('div')[0].className;
+		// var zz = z.childNodes;
+		console.log(z);
 }

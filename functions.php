@@ -26,7 +26,7 @@ function dis_dir($conn){
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='dir0'><p>".$res[$i]['Name'].'</p>';
+			echo "<div class='dir0'><p onclick='toggle_children(this)'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
 					echo "<div class='dir1'><p>".$res[$j]['Name'].'</p>';
