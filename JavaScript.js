@@ -24,14 +24,19 @@ window.onload = function(){
 
 // 左侧目录点击后显示和隐藏子元素
 function toggle_children(this_ele){
-		var z = this_ele.parentNode.getElementsByTagName('div');
-		// var zz = z.childNodes;
-		console.log(z);
+	var child_div = this_ele.parentNode.getElementsByTagName('div');
+	for(var i=0;i<child_div.length;i++){
+		if (child_div[i].style.display=='block'){
+			child_div[i].style.display='none';
+		}
+		else{
+			child_div[i].style.display='block';
+		}
+	}
 }
 
 // 右键菜单
 document.oncontextmenu = function(){
-	// if(!event) event=window.event;
 	if(event.button==2){
 		var x=event.clientX;
 		var y=event.clientY;

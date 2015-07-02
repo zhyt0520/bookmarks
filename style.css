@@ -36,6 +36,18 @@ body{
 .content{
 	margin: 14px;
 }
+.dir0{
+	display: block;
+	border: 1px solid #eee;
+}
+.dir1{
+	display: block;
+	border: 1px solid #eee;
+}
+.dir2{
+	display: block;
+	border: 1px solid #eee;
+}
 #contextmenu{
 	min-width: 80px;
 	visibility: hidden;
