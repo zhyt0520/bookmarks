@@ -1,19 +1,15 @@
-function $(id){
-	return document.getElementById(id)
-}
-
 // 竖分隔线拖动
 window.onload = function(){
-	$('line').onmousedown = function(){
-		var old_width = $('left').offsetWidth;
+	document.getElementById('line').onmousedown = function(){
+		var old_width = document.getElementById('left').offsetWidth;
 		var old_x = event.clientX;
 		document.onmousemove = function(){
 			var new_x = old_width + event.clientX - old_x;
 			var min_x = 150;
-			var max_x = $('top').offsetWidth * 0.7;
+			var max_x = document.getElementById('top').offsetWidth * 0.7;
 			new_x < min_x && (new_x = min_x);
 			new_x > max_x && (new_x = max_x);
-			$('left').style.width = new_x + 'px';
+			document.getElementById('left').style.width = new_x + 'px';
 		}
 		return false
 	}
@@ -40,18 +36,36 @@ document.oncontextmenu = function(){
 	if(event.button==2){
 		var x=event.clientX;
 		var y=event.clientY;
-		$('contextmenu').style.left=x+'px';
-		$('contextmenu').style.top=y+'px';
-		$('contextmenu').style.visibility='visible';
-		$('contextmenu').style.position='fixed';
+		document.getElementById('contextmenu').style.left=x+'px';
+		document.getElementById('contextmenu').style.top=y+'px';
+		document.getElementById('contextmenu').style.visibility='visible';
+		document.getElementById('contextmenu').style.position='fixed';
 	}
 	return false
 }
 document.onclick = function(){
-	$('contextmenu').style.visibility='hidden';
+	document.getElementById('contextmenu').style.visibility='hidden';
 }
 
 // 动态更新右侧内容
-function dis_url_ajax(){
+function dis_url_ajax(id){
+	console.log('123');
+	var xmlhttp;
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function(){
+		if(xmlhttp.readyState==4 && xmlhttp.status==200){
+			console.log('zzz');
+			var clean = document.getElementById('right_content');
+			clean.parentNode.removeChild(clean);
+			var right_content = document.createElement('div');
+			right_content.id='right_content';
+			// right_content.setAttribute('id','right_content');
+			// 另一种设置id方法
+			right_content.innerHTML='new text';
+			document.getElementById('right').appendChild(right_content);
+		}
+	}
 
+	xmlhttp.open('get','',true);
+	xmlhttp.send();
 }

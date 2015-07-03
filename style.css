@@ -38,15 +38,15 @@ body{
 }
 .dir0{
 	display: block;
-	border: 1px solid #eee;
+	border: 1px solid #999;
 }
 .dir1{
 	display: block;
-	border: 1px solid #eee;
+	border: 1px solid #999;
 }
 .dir2{
 	display: block;
-	border: 1px solid #eee;
+	border: 1px solid #999;
 }
 #contextmenu{
 	min-width: 80px;

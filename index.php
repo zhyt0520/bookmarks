@@ -12,13 +12,13 @@
 		<div class='content'>zhyt's bookmark.</div>
 	</div>
 	<div id='left'>
-		<div class='content'>
+		<div class='content' id='left_content'>
 			<?php $conn=connect_db(); $res=dis_dir($conn); ?>
 		</div>
 	</div>
 	<div id='line'></div>
 	<div id='right'>
-		<div class='content'>
+		<div class='content' id='right_content'>
 			<?php dis_url($conn,$res); ?>
 		</div>
 	</div>

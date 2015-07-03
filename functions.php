@@ -26,13 +26,13 @@ function dis_dir($conn){
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='dir0' id='dbdir".$res[$i]['Id']."' style='display:block'><p onclick='toggle_children(this)'>".$res[$i]['Name'].'</p>';
+			echo "<div class='dir0' id='dbdir".$res[$i]['Id']."' style='display:block'><p onclick='dis_url_ajax(".$res[$i]['Id'].")'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='dir1' id='dbdir".$res[$j]['Id']."' style='display:none'><p onclick='toggle_children(this)'>".$res[$j]['Name'].'</p>';
+					echo "<div class='dir1' id='dbdir".$res[$j]['Id']."' style='display:none'><p onclick='dis_url_ajax(".$res[$j]['Id'].")'>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div calss='dir2' id='dbdir".$res[$k]['Id']."' style='display:none'><p onclick='toggle_children(this)'>".$res[$k]['Name'].'</p>';
+							echo "<div calss='dir2' id='dbdir".$res[$k]['Id']."' style='display:none'><p onclick='dis_url_ajax(".$res[$k]['Id'].")'>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}
