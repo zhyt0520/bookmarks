@@ -61,11 +61,11 @@ function dis_url_ajax(id){
 			right_content.id='right_content';
 			// right_content.setAttribute('id','right_content');
 			// 另一种设置id方法
-			right_content.innerHTML='new text';
 			document.getElementById('right').appendChild(right_content);
+			right_content.innerHTML=xmlhttp.responseText;
 		}
 	}
 
-	xmlhttp.open('get','',true);
+	xmlhttp.open('get','dis_url_ajax.php?q='+id,true);
 	xmlhttp.send();
 }
