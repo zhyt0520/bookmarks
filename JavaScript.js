@@ -22,11 +22,15 @@ window.onload = function(){
 function toggle_children(this_ele){
 	var child_div = this_ele.parentNode.getElementsByTagName('div');
 	for(var i=0;i<child_div.length;i++){
-		if (child_div[i].style.display=='block'){
+		if(child_div[i].style.display=='block'){
 			child_div[i].style.display='none';
-		}
-		else{
+		}else{
 			child_div[i].style.display='block';
+		}
+		if(this_ele.className=='iconfont icon-xiangxia'){
+			this_ele.className='iconfont icon-xiangyou';
+		}else{
+			this_ele.className='iconfont icon-xiangxia';
 		}
 	}
 }
@@ -49,23 +53,23 @@ document.onclick = function(){
 
 // 动态更新右侧内容
 function dis_url_ajax(id){
-	console.log('123');
 	var xmlhttp;
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function(){
 		if(xmlhttp.readyState==4 && xmlhttp.status==200){
-			console.log('zzz');
 			var clean = document.getElementById('right_content');
 			clean.parentNode.removeChild(clean);
 			var right_content = document.createElement('div');
 			right_content.id='right_content';
+			right_content.className='content';
 			// right_content.setAttribute('id','right_content');
 			// 另一种设置id方法
 			document.getElementById('right').appendChild(right_content);
+			// 把服务器返回内容填充到右侧二级div内<div id='right_content' class='content'></div>
 			right_content.innerHTML=xmlhttp.responseText;
+			console.log(xmlhttp.responseText);
 		}
 	}
-
 	xmlhttp.open('get','dis_url_ajax.php?q='+id,true);
 	xmlhttp.send();
 }
