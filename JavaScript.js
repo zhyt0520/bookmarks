@@ -20,12 +20,15 @@ window.onload = function(){
 
 // 左侧目录点击后显示和隐藏子元素
 function toggle_children(this_ele){
-	var child_div = this_ele.parentNode.getElementsByTagName('div');
+	var child_div=this_ele.parentNode.childNodes;
 	for(var i=0;i<child_div.length;i++){
-		if(child_div[i].style.display=='block'){
-			child_div[i].style.display='none';
-		}else{
-			child_div[i].style.display='block';
+		// 需要判断是儿子还是孙子
+		if(child_div[i].nodeName=='DIV'){
+			if(child_div[i].style.display=='block'){
+				child_div[i].style.display='none';
+			}else{
+				child_div[i].style.display='block';
+			}
 		}
 		if(this_ele.className=='iconfont icon-xiangxia'){
 			this_ele.className='iconfont icon-xiangyou';

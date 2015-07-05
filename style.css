@@ -43,10 +43,12 @@ body{
 .dir1{
 	display: block;
 	border: 1px solid #999;
+	padding-left: 20px;
 }
 .dir2{
 	display: block;
 	border: 1px solid #999;
+	padding-left: 20px;
 }
 #contextmenu{
 	min-width: 80px;

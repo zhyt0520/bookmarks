@@ -34,13 +34,13 @@ function dis_dir($conn){
 	// 循环输出左侧dir目录结构，只有三层深度
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='dir0' id='dbdir".$res[$i]['Id']."' style='display:block'><i class='iconfont icon-xiangxia' onclick='toggle_children(this)' ".$has_children[$i]."></i><span onclick='dis_url_ajax(".$res[$i]['Id'].")'>".$res[$i]['Name'].'</span>';
+			echo "<div class='dir0' id='dbdir".$res[$i]['Id']."' style='display:block'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$i]."></i><span onclick='dis_url_ajax(".$res[$i]['Id'].")'>".$res[$i]['Name'].'</span>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='dir1' id='dbdir".$res[$j]['Id']."' style='display:none'><i class='iconfont icon-xiangxia' onclick='toggle_children(this)' ".$has_children[$j]."></i><span onclick='dis_url_ajax(".$res[$j]['Id'].")'>".$res[$j]['Name'].'</span>';
+					echo "<div class='dir1' id='dbdir".$res[$j]['Id']."' style='display:none'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$j]."></i><span onclick='dis_url_ajax(".$res[$j]['Id'].")'>".$res[$j]['Name'].'</span>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div calss='dir2' id='dbdir".$res[$k]['Id']."' style='display:none'><i class='iconfont icon-xiangxia' onclick='toggle_children(this)' ".$has_children[$k]."></i><span onclick='dis_url_ajax(".$res[$k]['Id'].")'>".$res[$k]['Name'].'</span>';
+							echo "<div class='dir2' id='dbdir".$res[$k]['Id']."' style='display:none'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$k]."></i><span onclick='dis_url_ajax(".$res[$k]['Id'].")'>".$res[$k]['Name'].'</span>';
 							echo '</div>';
 						}
 					}
@@ -80,7 +80,7 @@ function dis_url_ajax($conn,$id){
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
 	$response='';
 	for ($i=0;$i<count($res);$i++){
-		$response='<p>name: '.$res[$i]['Name'].' url: '.$res[$i]['Url'].'</p>';
+		$response.='<p>name: '.$res[$i]['Name'].' url: '.$res[$i]['Url'].'</p>';
 	}
 	return $response;
 }
