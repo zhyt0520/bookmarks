@@ -5,8 +5,9 @@ window.onload = function(){
 		var old_x = event.clientX;
 		document.onmousemove = function(){
 			var new_x = old_width + event.clientX - old_x;
-			var min_x = 150;
-			var max_x = document.getElementById('top').offsetWidth * 0.7;
+			var min_x = 175;
+			var max_x = document.getElementById('top').offsetWidth - 300;
+			// var max_x = document.getElementById('top').offsetWidth * 0.7;
 			new_x < min_x && (new_x = min_x);
 			new_x > max_x && (new_x = max_x);
 			document.getElementById('left').style.width = new_x + 'px';
@@ -22,7 +23,7 @@ window.onload = function(){
 function toggle_children(this_ele){
 	var child_div=this_ele.parentNode.childNodes;
 	for(var i=0;i<child_div.length;i++){
-		// 需要判断是儿子还是孙子
+		// 需要分辨是儿子还是孙子
 		if(child_div[i].nodeName=='DIV'){
 			if(child_div[i].style.display=='block'){
 				child_div[i].style.display='none';
@@ -30,11 +31,11 @@ function toggle_children(this_ele){
 				child_div[i].style.display='block';
 			}
 		}
-		if(this_ele.className=='iconfont icon-xiangxia'){
-			this_ele.className='iconfont icon-xiangyou';
-		}else{
-			this_ele.className='iconfont icon-xiangxia';
-		}
+	}
+	if(this_ele.className=='iconfont icon-xiangxia'){
+		this_ele.className='iconfont icon-xiangyou';
+	}else{
+		this_ele.className='iconfont icon-xiangxia';
 	}
 }
 

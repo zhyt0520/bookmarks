@@ -3,6 +3,20 @@ html{
 }
 body{
 	height: 100%;
+	cursor: default;
+}
+body{
+	/*禁止页面复制选中文本*/
+	-moz-user-select: none; /*火狐*/
+	-webkit-user-select: none; /*webkit浏览器*/
+	-ms-user-select: none; /*IE10*/
+	-khtml-user-select: none; /*早期浏览器*/
+	user-select: none;
+}
+span{
+	overflow: hidden;
+	white-space: nowrap;
+	background-color: #eee;
 }
 #top{
 	height: 10%;
@@ -13,7 +27,6 @@ body{
 	width: 200px;
 	height: 90%;
 	border: 1px solid #000;
-	/*border-right: 0px;*/
 	float: left;
 	display: inline;
 	overflow:auto;
@@ -30,7 +43,6 @@ body{
 	width: auto;
 	height: 90%;
 	border: 1px solid #000;
-	/*border-left: 0px;*/
 	overflow:auto;
 }
 .content{
@@ -39,6 +51,7 @@ body{
 .dir0{
 	display: block;
 	border: 1px solid #999;
+	overflow: hidden;
 }
 .dir1{
 	display: block;
@@ -57,11 +70,16 @@ body{
 	background-color: #fff;
 }
 #contextmenu ul{
-	margin: 4px 7px;
+	margin: 7px 0;
 	padding: 0;
 }
 #contextmenu ul li{
+	margin: 3.5px 0;
+	padding: 0 7px;
 	list-style-type: none;
+}
+#contextmenu ul li:hover{
+	background-color: #F1F7FF;
 }
 
 

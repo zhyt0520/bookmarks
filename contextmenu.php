@@ -1,7 +1,9 @@
 <div id='contextmenu'>
 	<ul>
-		<li>menu1</li>
-		<li>menu2</li>
-		<li>menu3</li>
+		<li>重命名</li>
+		<li>修改</li>
+		<li>删除</li>
+		<li>添加网页</li>
+		<li>添加文件夹</li>
 	</ul>
 </div>
