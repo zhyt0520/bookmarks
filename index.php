@@ -12,16 +12,16 @@
 		<div class='content'>zhyt's bookmark.</div>
 	</div>
 	<div id='left'>
-		<div class='content' id='left_content'>
+		<div class='content' id='content_left'>
 			<?php $conn=connect_db(); $res=dis_dir($conn); ?>
 		</div>
 	</div>
 	<div id='line'></div>
-	<div id='right'>
-		<div class='content' id='right_content'>
+	<div id='right' onmousedown='context_menu_right(this)'>
+		<div class='content' id='content_right'>
 			<?php dis_url($conn,$res); ?>
 		</div>
 	</div>
-	<?php require 'contextmenu.php' ?>
+	<?php require 'context_menu.php' ?>
 </body>
 </html>

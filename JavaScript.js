@@ -19,7 +19,7 @@ window.onload = function(){
 	}
 }
 
-// 左侧目录点击后显示和隐藏子元素
+// 左侧目录点击后显示和隐藏子元目录
 function toggle_children(this_ele){
 	var child_div=this_ele.parentNode.childNodes;
 	for(var i=0;i<child_div.length;i++){
@@ -39,20 +39,38 @@ function toggle_children(this_ele){
 	}
 }
 
-// 右键菜单
-document.oncontextmenu = function(){
-	if(event.button==2){
-		var x=event.clientX;
-		var y=event.clientY;
-		document.getElementById('contextmenu').style.left=x+'px';
-		document.getElementById('contextmenu').style.top=y+'px';
-		document.getElementById('contextmenu').style.visibility='visible';
-		document.getElementById('contextmenu').style.position='fixed';
+// 右侧右键菜单
+// document.oncontextmenu = function(){
+// 	if(event.button==2){
+// 		var x=event.clientX;
+// 		var y=event.clientY;
+// 		document.getElementById('contextmenu').style.left=x+'px';
+// 		document.getElementById('contextmenu').style.top=y+'px';
+// 		document.getElementById('contextmenu').style.visibility='visible';
+// 		document.getElementById('contextmenu').style.position='fixed';
+// 		document.getElementById('contextmenu').style.display='block';
+// 	}
+// 	return false
+// }
+// document.onclick = function(){
+// 	document.getElementById('contextmenu').style.visibility='hidden';
+// }
+function context_menu_right(this_ele){
+	this_ele.oncontextmenu=function(){
+		if(event.button==2){
+			var x=event.clientX;
+			var y=event.clientY;
+			document.getElementById('contextmenu_right').style.left=x+'px';
+			document.getElementById('contextmenu_right').style.top=y+'px';
+			document.getElementById('contextmenu_right').style.visibility='visible';
+			document.getElementById('contextmenu_right').style.position='fixed';
+			document.getElementById('contextmenu_right').style.display='block';
+		}
+		return false
 	}
-	return false
-}
-document.onclick = function(){
-	document.getElementById('contextmenu').style.visibility='hidden';
+	document.onclick = function(){
+		document.getElementById('contextmenu_right').style.visibility='hidden';
+	}
 }
 
 // 动态更新右侧内容
@@ -61,19 +79,28 @@ function dis_url_ajax(id){
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function(){
 		if(xmlhttp.readyState==4 && xmlhttp.status==200){
-			var clean = document.getElementById('right_content');
+			var clean = document.getElementById('content_right');
 			clean.parentNode.removeChild(clean);
-			var right_content = document.createElement('div');
-			right_content.id='right_content';
-			right_content.className='content';
-			// right_content.setAttribute('id','right_content');
+			var content_right = document.createElement('div');
+			content_right.id='content_right';
+			content_right.className='content';
+			// content_right.setAttribute('id','content_right');
 			// 另一种设置id方法
-			document.getElementById('right').appendChild(right_content);
-			// 把服务器返回内容填充到右侧二级div内<div id='right_content' class='content'></div>
-			right_content.innerHTML=xmlhttp.responseText;
-			console.log(xmlhttp.responseText);
+			document.getElementById('right').appendChild(content_right);
+			// 把服务器返回内容填充到右侧二级div内<div id='content_right' class='content'></div>
+			content_right.innerHTML=xmlhttp.responseText;
 		}
 	}
 	xmlhttp.open('get','dis_url_ajax.php?q='+id,true);
 	xmlhttp.send();
+}
+
+// 新建url
+function add_url(this_ele){
+
+}
+
+// 新建folder
+function add_folder(this_ele){
+
 }

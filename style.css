@@ -1,5 +1,5 @@
 html{
-	height: 94%;
+	height: 95%;
 }
 body{
 	height: 100%;
@@ -63,22 +63,23 @@ span{
 	border: 1px solid #999;
 	padding-left: 20px;
 }
-#contextmenu{
+#contextmenu_right{
 	min-width: 80px;
 	visibility: hidden;
 	border: 1px solid #000;
 	background-color: #fff;
+	display: none;
 }
-#contextmenu ul{
+#contextmenu_right ul{
 	margin: 7px 0;
 	padding: 0;
 }
-#contextmenu ul li{
+#contextmenu_right ul li{
 	margin: 3.5px 0;
 	padding: 0 7px;
 	list-style-type: none;
 }
-#contextmenu ul li:hover{
+#contextmenu_right ul li:hover{
 	background-color: #F1F7FF;
 }
 
