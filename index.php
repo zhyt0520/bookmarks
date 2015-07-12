@@ -3,7 +3,6 @@
 <head>
 	<title>zhyt's bookmark.</title>
 	<link type="text/css" rel="stylesheet" href="style.css">
-	<script type="text/javascript" src="javascript.js"></script>
 	<?php require 'config.php' ?>
 	<?php require 'functions.php' ?>
 </head>
@@ -23,5 +22,6 @@
 		</div>
 	</div>
 	<?php require 'context_menu.php' ?>
+	<script type="text/javascript" src="javascript.js"></script>
 </body>
 </html>

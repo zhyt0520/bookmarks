@@ -1,22 +1,26 @@
+// 把对象传入函数，对其属性做更改，是通过引用/指针的方式
+// 定义对象mydata，定义属性selected_db_id，记录当前显示在右侧的dir的数据库id
+var mydata={
+	selected_db_id:null,
+}
+
 // 竖分隔线拖动
-window.onload = function(){
-	document.getElementById('line').onmousedown = function(){
-		var old_width = document.getElementById('left').offsetWidth;
-		var old_x = event.clientX;
-		document.onmousemove = function(){
-			var new_x = old_width + event.clientX - old_x;
-			var min_x = 175;
-			var max_x = document.getElementById('top').offsetWidth - 300;
-			// var max_x = document.getElementById('top').offsetWidth * 0.7;
-			new_x < min_x && (new_x = min_x);
-			new_x > max_x && (new_x = max_x);
-			document.getElementById('left').style.width = new_x + 'px';
-		}
-		return false
+document.getElementById('line').onmousedown = function(){
+	var old_width = document.getElementById('left').offsetWidth;
+	var old_x = event.clientX;
+	document.onmousemove = function(){
+		var new_x = old_width + event.clientX - old_x;
+		var min_x = 100;
+		var max_x = document.getElementById('top').offsetWidth - 300;
+		// var max_x = document.getElementById('top').offsetWidth * 0.7;
+		new_x < min_x && (new_x = min_x);
+		new_x > max_x && (new_x = max_x);
+		document.getElementById('left').style.width = new_x + 'px';
 	}
-	document.onmouseup = function(){
-		document.onmousemove = null;
-	}
+	return false
+}
+document.onmouseup = function(){
+	document.onmousemove = null;
 }
 
 // 左侧目录点击后显示和隐藏子元目录
@@ -40,21 +44,6 @@ function toggle_children(this_ele){
 }
 
 // 右侧右键菜单
-// document.oncontextmenu = function(){
-// 	if(event.button==2){
-// 		var x=event.clientX;
-// 		var y=event.clientY;
-// 		document.getElementById('contextmenu').style.left=x+'px';
-// 		document.getElementById('contextmenu').style.top=y+'px';
-// 		document.getElementById('contextmenu').style.visibility='visible';
-// 		document.getElementById('contextmenu').style.position='fixed';
-// 		document.getElementById('contextmenu').style.display='block';
-// 	}
-// 	return false
-// }
-// document.onclick = function(){
-// 	document.getElementById('contextmenu').style.visibility='hidden';
-// }
 function context_menu_right(this_ele){
 	this_ele.oncontextmenu=function(){
 		if(event.button==2){
@@ -62,19 +51,17 @@ function context_menu_right(this_ele){
 			var y=event.clientY;
 			document.getElementById('contextmenu_right').style.left=x+'px';
 			document.getElementById('contextmenu_right').style.top=y+'px';
-			document.getElementById('contextmenu_right').style.visibility='visible';
-			document.getElementById('contextmenu_right').style.position='fixed';
 			document.getElementById('contextmenu_right').style.display='block';
 		}
 		return false
 	}
 	document.onclick = function(){
-		document.getElementById('contextmenu_right').style.visibility='hidden';
+		document.getElementById('contextmenu_right').style.display='none';
 	}
 }
 
-// 动态更新右侧内容
-function dis_url_ajax(id){
+// 动态更新右侧内容,参数id为左侧被点击dir的数据库id
+function dis_url_ajax(id,mydata){
 	var xmlhttp;
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function(){
@@ -93,11 +80,14 @@ function dis_url_ajax(id){
 	}
 	xmlhttp.open('get','dis_url_ajax.php?q='+id,true);
 	xmlhttp.send();
+	mydata.selected_db_id=id;
+	// console.log(mydata.selected_db_id)
 }
 
 // 新建url
 function add_url(this_ele){
-
+	var new_url=document.createElement('p');
+	document.getElementById('content_right').appendChild(new_url);
 }
 
 // 新建folder

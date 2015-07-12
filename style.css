@@ -14,8 +14,6 @@ body{
 	user-select: none;
 }
 span{
-	overflow: hidden;
-	white-space: nowrap;
 	background-color: #eee;
 }
 #top{
@@ -51,7 +49,9 @@ span{
 .dir0{
 	display: block;
 	border: 1px solid #999;
-	overflow: hidden;
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
 }
 .dir1{
 	display: block;
@@ -65,10 +65,10 @@ span{
 }
 #contextmenu_right{
 	min-width: 80px;
-	visibility: hidden;
 	border: 1px solid #000;
 	background-color: #fff;
 	display: none;
+	position: fixed;
 }
 #contextmenu_right ul{
 	margin: 7px 0;
@@ -92,7 +92,6 @@ span{
   url('iconfont/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
   url('iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
 }
-
 .iconfont {
   font-family:"iconfont" !important;
   font-size:12px;
