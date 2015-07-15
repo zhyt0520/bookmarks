@@ -1,9 +1,11 @@
+/*整体*/
 html{
 	height: 95%;
 }
 body{
 	height: 100%;
 	cursor: default;
+	font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
 }
 body{
 	/*禁止页面复制选中文本*/
@@ -13,9 +15,19 @@ body{
 	-khtml-user-select: none; /*早期浏览器*/
 	user-select: none;
 }
-span{
-	background-color: #eee;
+p{
+	margin: 0;
+	padding: 0;
 }
+/*实验*/
+/*#triangle_up{
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 50px solid red;
+}*/
+/*布局*/
 #top{
 	height: 10%;
 	border: 1px solid #000;
@@ -44,25 +56,61 @@ span{
 	overflow:auto;
 }
 .content{
-	margin: 14px;
+	margin: 7px;
 }
-.dir0{
+/*左侧*/
+.tree0{
 	display: block;
-	border: 1px solid #999;
+	/*border: 1px solid #999;*/
 	overflow: hidden; /*文字超出边界显示三点*/
 	text-overflow: ellipsis; /*文字超出边界显示三点*/
 	white-space: nowrap; /*文字超出边界显示三点*/
 }
-.dir1{
-	display: block;
-	border: 1px solid #999;
+.tree1{
+	display: none;
+	/*border: 1px solid #999;*/
 	padding-left: 20px;
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
 }
-.dir2{
-	display: block;
-	border: 1px solid #999;
+.tree2{
+	display: none;
+	/*border: 1px solid #999;*/
 	padding-left: 20px;
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
 }
+.dir{
+	padding: 0 3.5px;
+	display: inline-block;
+	border: 1px solid transparent;
+}
+.dir:hover{
+	background-color: hsl(214, 91%, 97%);
+	border: 1px solid hsl(214, 91%, 85%);
+}
+/*右侧*/
+.item{
+	border: 1px solid transparent;
+}
+.item:hover{
+	background-color: hsl(214, 91%, 97%);
+	border: 1px solid hsl(214, 91%, 85%);
+}
+.name{
+	padding: 0 3.5px;
+	display: inline-block;
+}
+.url{
+	color: rgb(179,179,179);
+	margin-left: 14px;
+	padding: 0 3.5px;
+	display: inline-block;
+	visibility: hidden;
+}
+/*右键菜单*/
 #contextmenu_right{
 	min-width: 80px;
 	border: 1px solid #000;
@@ -83,7 +131,6 @@ span{
 	background-color: #F1F7FF;
 }
 
-
 /*字体图标*/
 @font-face {font-family: "iconfont";
   src: url('iconfont/iconfont.eot'); /* IE9*/
@@ -100,6 +147,7 @@ span{
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
   display: inline;
+  color: rgb(173,173,173);
 }
 .icon-xiangxia:before { content: "\f01a6"; }
 .icon-xiangyou:before { content: "\f01a9"; }

@@ -34,9 +34,9 @@ function dis_dir($conn){
 	}
 	// 循环输出左侧dir目录结构，只有三层深度
 	// 支持无限值深度怎么实现？确定最大值，然后用数组处理循环变量i,j,k？
-	$res_depth=array_column($res,'depth'); // 需要php版本5.5以上
-	$res_depth_max=max($res_depth);
-	$ijk=range(0,$res_depth_max);
+	// $res_depth=array_column($res,'Depth'); // 需要php版本5.5以上
+	// $res_depth_max=max($res_depth);
+	// $ijk=range(0,$res_depth_max);
 
 	// 最外层,即depth=0,循环输出（的前半部分，后面需补足分号和输出</div>）
 	
@@ -52,13 +52,13 @@ function dis_dir($conn){
 
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='dir0' id='dbdir".$res[$i]['Id']."' style='display:block'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$i]."></i><span onclick='dis_url_ajax(".$res[$i]['Id'].",mydata)'>".$res[$i]['Name'].'</span>';
+			echo "<div class='tree0' id='dbdir".$res[$i]['Id']."'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$i]."></i><p class='dir' onclick='dis_url_ajax(".$res[$i]['Id'].",mydata)'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='dir1' id='dbdir".$res[$j]['Id']."' style='display:none'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$j]."></i><span onclick='dis_url_ajax(".$res[$j]['Id'].",mydata)'>".$res[$j]['Name'].'</span>';
+					echo "<div class='tree1' id='dbdir".$res[$j]['Id']."'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$j]."></i><p class='dir' onclick='dis_url_ajax(".$res[$j]['Id'].",mydata)'>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div class='dir2' id='dbdir".$res[$k]['Id']."' style='display:none'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$k]."></i><span onclick='dis_url_ajax(".$res[$k]['Id'].",mydata)'>".$res[$k]['Name'].'</span>';
+							echo "<div class='tree2' id='dbdir".$res[$k]['Id']."'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$k]."></i><p class='dir' onclick='dis_url_ajax(".$res[$k]['Id'].",mydata)'>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}
@@ -71,6 +71,15 @@ function dis_dir($conn){
 	return $res;
 }
 
+// 根据数据库返回结果循环输出右侧条目class=item
+function echo_db_res($res){
+	$response='';
+	for ($i=0;$i<count($res);$i++){
+		$response.='<div class="item" onmouseover=hover_dis(this) onmouseout=hover_in_dis(this) onclick=click_color(this)><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
+	}
+	return $response;
+}
+
 // 默认显示第一个目录下的书签
 function dis_url($conn,$res){
 	$frist_id=$res[0]['Id'];
@@ -78,22 +87,9 @@ function dis_url($conn,$res){
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res_url=$result->fetchall(PDO::FETCH_ASSOC);
-	for($i=0;$i<count($res_url);$i++){
-		echo '<p>name: '.$res_url[$i]['Name'].' url: '.$res_url[$i]['Url'];
-	}
+	$response=echo_db_res($res_url);
+	echo $response;
 }
 
-// 为ajax更新右侧内容查询数据库并返回结果
-function dis_url_ajax($conn,$id){
-	$query='select * from bookmarks where parentid = '.$id.' and isdir = 0';
-	$result=$conn->prepare($query);
-	$result->execute();
-	$res=$result->fetchall(PDO::FETCH_ASSOC);
-	$response='';
-	for ($i=0;$i<count($res);$i++){
-		$response.='<p>name: '.$res[$i]['Name'].' url: '.$res[$i]['Url'].'</p>';
-	}
-	return $response;
-}
 
 ?>

@@ -8,18 +8,17 @@
 </head>
 <body>
 	<div id='top'>
-		<div class='content'>zhyt's bookmark.</div>
+		<div class='content'>
+			<div>zhyt's bookmark.</div>
+			<div>记录：编写function click_color()</div>
+		</div>
 	</div>
 	<div id='left'>
-		<div class='content' id='content_left'>
-			<?php $conn=connect_db(); $res=dis_dir($conn); ?>
-		</div>
+		<div class='content' id='content_left'><?php $conn=connect_db(); $res=dis_dir($conn); ?></div>
 	</div>
 	<div id='line'></div>
 	<div id='right' onmousedown='context_menu_right(this)'>
-		<div class='content' id='content_right'>
-			<?php dis_url($conn,$res); ?>
-		</div>
+		<div class='content' id='content_right'><?php dis_url($conn,$res); ?></div>
 	</div>
 	<?php require 'context_menu.php' ?>
 	<script type="text/javascript" src="javascript.js"></script>

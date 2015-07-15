@@ -10,7 +10,7 @@ document.getElementById('line').onmousedown = function(){
 	var old_x = event.clientX;
 	document.onmousemove = function(){
 		var new_x = old_width + event.clientX - old_x;
-		var min_x = 100;
+		var min_x = 120;
 		var max_x = document.getElementById('top').offsetWidth - 300;
 		// var max_x = document.getElementById('top').offsetWidth * 0.7;
 		new_x < min_x && (new_x = min_x);
@@ -23,7 +23,7 @@ document.onmouseup = function(){
 	document.onmousemove = null;
 }
 
-// 左侧目录点击后显示和隐藏子元目录
+// 左侧目录点击后显示和隐藏子目录
 function toggle_children(this_ele){
 	var child_div=this_ele.parentNode.childNodes;
 	for(var i=0;i<child_div.length;i++){
@@ -84,13 +84,27 @@ function dis_url_ajax(id,mydata){
 	// console.log(mydata.selected_db_id)
 }
 
+// 右侧用鼠标hover控制url显示状态
+function hover_dis(this_ele){
+	this_ele.childNodes[1].style.visibility='visible';
+}
+function hover_in_dis(this_ele){
+	this_ele.childNodes[1].style.visibility='hidden';
+}
+
 // 新建url
+// 还没完成！！！
 function add_url(this_ele){
-	var new_url=document.createElement('p');
+	var new_url=document.createElement('input');
 	document.getElementById('content_right').appendChild(new_url);
 }
 
 // 新建folder
 function add_folder(this_ele){
 
+}
+
+// 点击右侧条目后更改背景颜色
+function click_color(this_ele){
+	
 }

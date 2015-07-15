@@ -5,7 +5,11 @@ require 'functions.php';
 // 获取XMLHttpRequest传输的数据q
 $id=$_GET['q'];
 $conn=connect_db();
-$response=dis_url_ajax($conn,$id);
+$query='select * from bookmarks where parentid = '.$id.' and isdir = 0';
+$result=$conn->prepare($query);
+$result->execute();
+$res=$result->fetchall(PDO::FETCH_ASSOC);
+$response=echo_db_res($res);
 echo $response;
 
 ?>
