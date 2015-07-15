@@ -86,18 +86,23 @@ p{
 	padding: 0 3.5px;
 	display: inline-block;
 	border: 1px solid transparent;
+	border-radius: 2px;
 }
 .dir:hover{
-	background-color: hsl(214, 91%, 97%);
-	border: 1px solid hsl(214, 91%, 85%);
+	/*添加!important可以提高css优先级，否则js的.style.strr会比css优先级高*/
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
 }
 /*右侧*/
 .item{
 	border: 1px solid transparent;
+	border-radius: 2px;
 }
 .item:hover{
-	background-color: hsl(214, 91%, 97%);
-	border: 1px solid hsl(214, 91%, 85%);
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
 }
 .name{
 	padding: 0 3.5px;

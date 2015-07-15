@@ -10,7 +10,6 @@
 	<div id='top'>
 		<div class='content'>
 			<div>zhyt's bookmark.</div>
-			<div>记录：编写function click_color()</div>
 		</div>
 	</div>
 	<div id='left'>

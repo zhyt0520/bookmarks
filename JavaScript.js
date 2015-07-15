@@ -2,6 +2,7 @@
 // 定义对象mydata，定义属性selected_db_id，记录当前显示在右侧的dir的数据库id
 var mydata={
 	selected_db_id:null,
+
 }
 
 // 竖分隔线拖动
@@ -60,8 +61,10 @@ function context_menu_right(this_ele){
 	}
 }
 
-// 动态更新右侧内容,参数id为左侧被点击dir的数据库id
-function dis_url_ajax(id,mydata){
+// 左侧目录单击事件函数
+// 参数1，this；参数2，被点击目录的数据库id；参数3，自定义数据对象mydata；
+function dir_click_left(this_ele,db_id,mydata){
+	// ajax更新右侧显示内容
 	var xmlhttp;
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function(){
@@ -78,10 +81,20 @@ function dis_url_ajax(id,mydata){
 			content_right.innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open('get','dis_url_ajax.php?q='+id,true);
+	xmlhttp.open('get','dis_url_ajax.php?q='+db_id,true);
 	xmlhttp.send();
-	mydata.selected_db_id=id;
-	// console.log(mydata.selected_db_id)
+	// 更改当前被点击目录的背景
+	if(mydata.selected_db_id!=db_id){
+		this_ele.style.border='1px solid rgb(84,155,247)';
+		this_ele.style.background='rgb(218,233,254)';
+	}
+	// 更改前一次被点击目录的背景
+	if(mydata.selected_db_id){
+		previous=document.getElementById('db'+mydata.selected_db_id);
+		previous.style.border='1px solid transparent';
+		previous.style.background='rgb(255,255,255)';
+	}
+	mydata.selected_db_id=db_id;
 }
 
 // 右侧用鼠标hover控制url显示状态
@@ -94,17 +107,18 @@ function hover_in_dis(this_ele){
 
 // 新建url
 // 还没完成！！！
-function add_url(this_ele){
+function add_url(this_ele,mydata){
+	var new_name=document.createElement('input');
+	new_name.style.width='100px';
 	var new_url=document.createElement('input');
+	new_url.style.width='200px';
+	new_url.style.marginLeft='14px';
+	document.getElementById('content_right').appendChild(new_name);
 	document.getElementById('content_right').appendChild(new_url);
+
 }
 
 // 新建folder
 function add_folder(this_ele){
 
-}
-
-// 点击右侧条目后更改背景颜色
-function click_color(this_ele){
-	
 }
