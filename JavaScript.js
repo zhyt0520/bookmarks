@@ -56,9 +56,14 @@ function context_menu_right(this_ele){
 		}
 		return false
 	}
-	document.onclick = function(){
-		document.getElementById('contextmenu_right').style.display='none';
-	}
+}
+
+// 页面内左键单击事件
+document.onclick = function(){
+	// 关闭右键菜单
+	document.getElementById('contextmenu_right').style.display='none';
+	// 关闭右侧新建网页条目
+	
 }
 
 // 左侧目录单击事件函数
@@ -112,10 +117,9 @@ function add_url(this_ele,mydata){
 	new_name.style.width='100px';
 	var new_url=document.createElement('input');
 	new_url.style.width='200px';
-	new_url.style.marginLeft='14px';
+	new_url.style.marginLeft='10.5px';
 	document.getElementById('content_right').appendChild(new_name);
 	document.getElementById('content_right').appendChild(new_url);
-
 }
 
 // 新建folder
