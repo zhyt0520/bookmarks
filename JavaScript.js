@@ -2,7 +2,6 @@
 // 定义对象mydata，定义属性selected_db_id，记录当前显示在右侧的dir的数据库id
 var mydata={
 	selected_db_id:null,
-
 }
 
 // 竖分隔线拖动
@@ -59,11 +58,34 @@ function context_menu_right(this_ele){
 }
 
 // 页面内左键单击事件
-document.onclick = function(){
+document.onclick = function(this_ele,mydata){
 	// 关闭右键菜单
 	document.getElementById('contextmenu_right').style.display='none';
-	// 关闭右侧新建网页条目
-	
+	// 完成右侧新建条目
+	if(document.getElementById('input_url') && document.getElementById('input_url').value){
+		var input_name=document.getElementById('input_name').value;
+		var input_url=document.getElementById('input_url').value;
+		var xmlhttp;
+		xmlhttp=new XMLHttpRequest();
+		// 未使用ajax的返回
+		// xmlhttp.onreadystatechange=function()
+
+
+
+		// ！！！用ajax返回的文本直接添加新网址,js添加元素太费劲！！！
+
+
+
+		xmlhttp.open('get','ajax.php?name='+input_name+'&&url='+input_url,true);
+		xmlhttp.send();
+		// 关闭新建表单元素
+		var clean=document.getElementById('new_item');
+		clean.parentNode.removeChild(clean);
+		// 右侧内容元素'content_right'追加子元素
+		// var content_right=document.getElementById('content_right');
+		// var new_item=document.createElement('div');
+		}
+	}
 }
 
 // 左侧目录单击事件函数
@@ -86,7 +108,7 @@ function dir_click_left(this_ele,db_id,mydata){
 			content_right.innerHTML=xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open('get','dis_url_ajax.php?q='+db_id,true);
+	xmlhttp.open('get','ajax.php?id='+db_id,true);
 	xmlhttp.send();
 	// 更改当前被点击目录的背景
 	if(mydata.selected_db_id!=db_id){
@@ -111,15 +133,18 @@ function hover_in_dis(this_ele){
 }
 
 // 新建url
-// 还没完成！！！
 function add_url(this_ele,mydata){
+	var new_form=document.createElement('form');
+	new_form.setAttribute('id','new_item');
 	var new_name=document.createElement('input');
-	new_name.style.width='100px';
+	new_name.setAttribute('id','input_name');
+	new_name.setAttribute('placeholder','名称');
 	var new_url=document.createElement('input');
-	new_url.style.width='200px';
-	new_url.style.marginLeft='10.5px';
-	document.getElementById('content_right').appendChild(new_name);
-	document.getElementById('content_right').appendChild(new_url);
+	new_url.setAttribute('id','input_url');
+	new_url.setAttribute('placeholder','网址');
+	new_form.appendChild(new_name);
+	new_form.appendChild(new_url);
+	document.getElementById('content_right').appendChild(new_form);
 }
 
 // 新建folder

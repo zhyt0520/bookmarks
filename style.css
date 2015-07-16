@@ -105,15 +105,40 @@ p{
 	border-radius: 2px !important;
 }
 .name{
-	padding: 0 3.5px;
+	padding: 0 3.5px 2px 3.5px;
 	display: inline-block;
 }
 .url{
 	color: rgb(179,179,179);
 	margin-left: 14px;
-	padding: 0 3.5px;
+	padding: 0 3.5px 2px 3.5px;
 	display: inline-block;
 	visibility: hidden;
+}
+form{
+	padding: 0 3.5px 2px 3.5px;
+	margin: 0px;
+}
+#new_item{
+	/*vertical-align: middle;*/
+	border: 1px solid transparent;
+	border-radius: 2px !important;
+}
+#new_item:hover{
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
+}
+#input_name{
+	width: 100px;
+	border: 1px solid rgb(191,191,191);
+	border-radius: 2px;
+}
+#input_url{
+	width: 200px;
+	margin-left: 7px;
+	border: 1px solid rgb(191,191,191);
+	border-radius: 2px;
 }
 /*右键菜单*/
 #contextmenu_right{
