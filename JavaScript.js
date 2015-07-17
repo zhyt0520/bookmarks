@@ -66,6 +66,9 @@ document.onclick = function(this_ele,mydata){
 	if(document.getElementById('input_url') && document.getElementById('input_url').value){
 		var input_name=document.getElementById('input_name').value;
 		var input_url=document.getElementById('input_url').value;
+		// 关闭右侧新建表单
+		var clean=document.getElementById('new_item');
+		clean.parentNode.removeChild(clean);
 		var xmlhttp;
 		xmlhttp=new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function(){
