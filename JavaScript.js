@@ -1,7 +1,8 @@
 // 把对象传入函数，对其属性做更改，是通过引用/指针的方式
 // 定义对象mydata，定义属性selected_db_id，记录当前显示在右侧的dir的数据库id
 var mydata={
-	selected_db_id:null,
+	selected_db_id:'',
+	selected_db_path:'',
 }
 
 // 竖分隔线拖动
@@ -67,24 +68,17 @@ document.onclick = function(this_ele,mydata){
 		var input_url=document.getElementById('input_url').value;
 		var xmlhttp;
 		xmlhttp=new XMLHttpRequest();
-		// 未使用ajax的返回
-		// xmlhttp.onreadystatechange=function()
-
-
-
-		// ！！！用ajax返回的文本直接添加新网址,js添加元素太费劲！！！
-
-
-
-		xmlhttp.open('get','ajax.php?name='+input_name+'&&url='+input_url,true);
-		xmlhttp.send();
-		// 关闭新建表单元素
-		var clean=document.getElementById('new_item');
-		clean.parentNode.removeChild(clean);
-		// 右侧内容元素'content_right'追加子元素
-		// var content_right=document.getElementById('content_right');
-		// var new_item=document.createElement('div');
+		xmlhttp.onreadystatechange=function(){
+			if(xmlhttp.readyState==4 && xmlhttp.status==200){
+				// 关闭新建表单元素
+				var clean=document.getElementById('new_item');
+				clean.parentNode.removeChild(clean);
+				// 右侧内容元素'content_right'追加responseText的内容
+				document.getElementById('content_right').innerHTML+=xmlhttp.responseText;
+			}
 		}
+	xmlhttp.open('get','ajax.php?id='+mydata.selected_db_id+'name='+input_name+'&&url='+input_url,true);
+	xmlhttp.send();
 	}
 }
 
@@ -96,16 +90,8 @@ function dir_click_left(this_ele,db_id,mydata){
 	xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function(){
 		if(xmlhttp.readyState==4 && xmlhttp.status==200){
-			var clean = document.getElementById('content_right');
-			clean.parentNode.removeChild(clean);
-			var content_right = document.createElement('div');
-			content_right.id='content_right';
-			content_right.className='content';
-			// content_right.setAttribute('id','content_right');
-			// 另一种设置id方法
-			document.getElementById('right').appendChild(content_right);
 			// 把服务器返回内容填充到右侧二级div内<div id='content_right' class='content'></div>
-			content_right.innerHTML=xmlhttp.responseText;
+			document.getElementById('content_right').innerHTML=xmlhttp.responseText;
 		}
 	}
 	xmlhttp.open('get','ajax.php?id='+db_id,true);

@@ -123,6 +123,7 @@ form{
 	/*vertical-align: middle;*/
 	border: 1px solid transparent;
 	border-radius: 2px !important;
+	background-color: rgb(240,240,240);
 }
 #new_item:hover{
 	background-color: hsl(214, 91%, 97%) !important;
