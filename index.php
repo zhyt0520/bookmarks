@@ -13,11 +13,11 @@
 		</div>
 	</div>
 	<div id='left'>
-		<div class='content' id='content_left'><?php $conn=connect_db(); $res=dis_dir($conn); ?></div>
+		<div class='content' id='content_left'><?php $conn=connect_db();if(isset($conn)){$res=dis_dir($conn);} ?></div>
 	</div>
 	<div id='line'></div>
 	<div id='right' onmousedown='context_menu_right(this)'>
-		<div class='content' id='content_right'><?php dis_url($conn,$res); ?></div>
+		<div class='content' id='content_right'><?php if(isset($conn)){dis_url($conn,$res);} ?></div>
 	</div>
 	<?php require 'context_menu.php' ?>
 	<script type="text/javascript" src="javascript.js"></script>

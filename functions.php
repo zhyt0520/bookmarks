@@ -8,9 +8,11 @@ function connect_db(){
 	}
 	catch(PDOException $e)
 	{
-		echo 'connect database failed: ' . $e->getMessage(); 
+		echo '数据库连接失败，请检查config.php文件内的配置数据。<br><br>错误信息：' . $e->getMessage(); 
 	}
-	return $conn;
+	if(isset($conn)){
+		return $conn;
+	}
 }
 
 // 查询目录并显示
@@ -90,6 +92,5 @@ function dis_url($conn,$res){
 	$response=echo_db_res($res_url);
 	echo $response;
 }
-
 
 ?>

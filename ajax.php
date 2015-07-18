@@ -3,10 +3,9 @@
 require 'config.php';
 require 'functions.php';
 
-
 // 根据左侧dir的数据库id查询内容，并返回右侧条目
 if(isset($_GET['id'])){
-	// 获取XMLHttpRequest传输的数据q
+	// 获取XMLHttpRequest传输的数据id
 	$id=$_GET['id'];
 	$conn=connect_db();
 	$query='select * from bookmarks where parentid = '.$id.' and isdir = 0';
