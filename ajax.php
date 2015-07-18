@@ -25,7 +25,7 @@ if(isset($_GET['id'],$_GET['name'],$_GET['url'])){
 	$url=$_GET['url'];
 	$conn=connect_db();
 	// ！！！存储数据需要知道当前选中目录的path,是不是用左侧dir单击函数来传递，那么需要ajax返回两个结果分别处理，怎么办
-	$query='insert into bookmarks ()';
+	$query='insert into bookmarks (，，，)';
 }
 
 ?>
