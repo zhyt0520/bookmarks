@@ -45,8 +45,8 @@ function toggle_children(this_ele){
 }
 
 // 右侧右键菜单
-function context_menu_right(this_ele){
-	this_ele.oncontextmenu=function(){
+document.getElementById('right').onmousedown=function(){
+	this.oncontextmenu=function(){
 		if(event.button==2){
 			var x=event.clientX;
 			var y=event.clientY;
@@ -57,6 +57,23 @@ function context_menu_right(this_ele){
 		return false
 	}
 }
+
+// 若鼠标单击位置非右侧右键菜单区域，且新建条目两个文本框均为空，关闭新建条目
+// 如果把该功能直接加入document.onclick，会导致新建条目显示不出来
+// ！！！通过在body下增加一层div，把页面内容和右键菜单div区分出来
+// ！！！在jquery中可以直接用not()方法实现元素集合中剔除部分元素，javascript中如何原生实现？？？
+// ！！！下面document.onclick的部分功能应该移动到document.getElementById('page').onclick内部来实现，有空闲时间再调
+
+// document.getElementById('page').onclick=function(){
+// 	if(document.getElementById('new_item') && document.getElementById('input_name').value=='' && document.getElementById('input_url').value==''){
+// 		var clean=document.getElementById('new_item');
+// 		clean.parentNode.removeChild(clean);
+// 	}
+// }
+
+// ！！！
+// 通过单击事件来关闭新建网页的item存在严重bug
+// ！！！
 
 // 页面内左键单击事件
 document.onclick = function(this_ele,mydata){
@@ -121,7 +138,7 @@ function hover_in_dis(this_ele){
 	this_ele.childNodes[1].style.visibility='hidden';
 }
 
-// 新建url
+// 右侧新建url
 function add_url(this_ele,mydata){
 	var new_form=document.createElement('form');
 	new_form.setAttribute('id','new_item');

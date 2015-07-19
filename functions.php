@@ -8,17 +8,32 @@ function connect_db(){
 	}
 	catch(PDOException $e)
 	{
-		echo '数据库连接失败，请检查config.php文件内的配置数据。<br><br>错误信息：' . $e->getMessage(); 
+		echo '数据库连接失败，请检查config.php文件内的配置数据。<br>错误信息：' . $e->getMessage(); 
 	}
 	if(isset($conn)){
+		if ($conn->query('show tables like "'.DB_TABLE.'"'==1)){
+			echo '数据表'.DB_TABLE.'已经存在，请检查config.php文件内的配置数据。';
+		}else{
+			$query='create table bookmarks ('.
+				'Id int not null auto_increment,'.
+				'Depth int not null,'.
+				'ParentId int not null,'.
+				'IsDir int not null,'.
+				'Name varchar(100),'.
+				'Url varchar(255) not null,'.
+				'primary key(Id));';
+			$result=$conn->prepare($query);
+			$result->execute();
+		}
+
 		return $conn;
 	}
 }
 
 // 查询目录并显示
-// 传入数据库连接，返回isdir=1的查询结果
+// 传入数据库连接conn，返回isdir=1的查询结果
 function dis_dir($conn){
-	$query='select * from bookmarks where isdir = 1';
+	$query='select * from '.DB_TABLE.' where isdir = 1';
 	// $result=$conn->query('select * from zhyt where isdir=1');
 	// query 直接连 SQL 语句
 	$result=$conn->prepare($query);
@@ -51,7 +66,6 @@ function dis_dir($conn){
 
 	// ！！！考虑是不是要整体改动左侧dir的输出结构
 	// ！！！还是可以加一层循环，能够输出下面的样子
-
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
 			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='dir_click_left(this,".$res[$i]['Id'].",mydata)'>".$res[$i]['Name'].'</p>';
@@ -84,13 +98,15 @@ function echo_db_res($res){
 
 // 默认显示第一个目录下的书签
 function dis_url($conn,$res){
-	$frist_id=$res[0]['Id'];
-	$query='select * from bookmarks where parentid = '.$frist_id.' and isdir = 0';
-	$result=$conn->prepare($query);
-	$result->execute();
-	$res_url=$result->fetchall(PDO::FETCH_ASSOC);
-	$response=echo_db_res($res_url);
-	echo $response;
+	if(count($res)>0){
+		$frist_id=$res[0]['Id'];
+		$query='select * from '.DB_TABLE.' where parentid = '.$frist_id.' and isdir = 0';
+		$result=$conn->prepare($query);
+		$result->execute();
+		$res_url=$result->fetchall(PDO::FETCH_ASSOC);
+		$response=echo_db_res($res_url);
+		echo $response;
+	}
 }
 
 ?>

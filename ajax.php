@@ -8,7 +8,7 @@ if(isset($_GET['id'])){
 	// 获取XMLHttpRequest传输的数据id
 	$id=$_GET['id'];
 	$conn=connect_db();
-	$query='select * from bookmarks where parentid = '.$id.' and isdir = 0';
+	$query='select * from '.DB_TABLE.' where parentid = '.$id.' and isdir = 0';
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
@@ -24,7 +24,7 @@ if(isset($_GET['id'],$_GET['name'],$_GET['url'])){
 	$url=$_GET['url'];
 	$conn=connect_db();
 	// ！！！存储数据需要知道当前选中目录的path,是不是用左侧dir单击函数来传递，那么需要ajax返回两个结果分别处理，怎么办
-	$query='insert into bookmarks (，，，)';
+	$query='insert into '.DB_TABLE.' (，，，)';
 }
 
 ?>
