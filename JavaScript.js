@@ -1,9 +1,8 @@
-// 把对象传入函数，对其属性做更改，是通过引用/指针的方式
-// 定义对象mydata，定义属性selected_db_id，记录当前显示在右侧的dir的数据库id
-var mydata={
-	selected_db_id:'',
-	selected_db_path:'',
-}
+// 全局变量
+//当前左侧被选中的目录的数据库id
+var selected_db_id;
+//当前左侧被选中的目录的数据库path
+var	selected_db_path;
 
 // 竖分隔线拖动
 document.getElementById('line').onmousedown = function(){
@@ -25,8 +24,8 @@ document.onmouseup = function(){
 }
 
 // 左侧目录点击后显示和隐藏子目录
-function toggle_children(this_ele){
-	var child_div=this_ele.parentNode.childNodes;
+function toggle_children(){
+	var child_div=this.parentNode.childNodes;
 	for(var i=0;i<child_div.length;i++){
 		// 需要分辨是儿子还是孙子
 		if(child_div[i].nodeName=='DIV'){
@@ -37,10 +36,10 @@ function toggle_children(this_ele){
 			}
 		}
 	}
-	if(this_ele.className=='iconfont icon-xiangxia'){
-		this_ele.className='iconfont icon-xiangyou';
+	if(this.className=='iconfont icon-xiangxia'){
+		this.className='iconfont icon-xiangyou';
 	}else{
-		this_ele.className='iconfont icon-xiangxia';
+		this.className='iconfont icon-xiangxia';
 	}
 }
 
@@ -53,30 +52,17 @@ document.getElementById('right').onmousedown=function(){
 			document.getElementById('contextmenu_right').style.left=x+'px';
 			document.getElementById('contextmenu_right').style.top=y+'px';
 			document.getElementById('contextmenu_right').style.display='block';
+			//若新建条目存在，且两表单均空，右键点击时删除
+			if($('#new_item') && $('input_name').val()=='' && $('input_url').val()==''){
+				$('#new_item').remove();
+			}
 		}
 		return false
 	}
 }
 
-// 若鼠标单击位置非右侧右键菜单区域，且新建条目两个文本框均为空，关闭新建条目
-// 如果把该功能直接加入document.onclick，会导致新建条目显示不出来
-// ！！！通过在body下增加一层div，把页面内容和右键菜单div区分出来
-// ！！！在jquery中可以直接用not()方法实现元素集合中剔除部分元素，javascript中如何原生实现？？？
-// ！！！下面document.onclick的部分功能应该移动到document.getElementById('page').onclick内部来实现，有空闲时间再调
-
-// document.getElementById('page').onclick=function(){
-// 	if(document.getElementById('new_item') && document.getElementById('input_name').value=='' && document.getElementById('input_url').value==''){
-// 		var clean=document.getElementById('new_item');
-// 		clean.parentNode.removeChild(clean);
-// 	}
-// }
-
-// ！！！
-// 通过单击事件来关闭新建网页的item存在严重bug
-// ！！！
-
 // 页面内左键单击事件
-document.onclick = function(this_ele,mydata){
+document.onclick = function(){
 	// 关闭右键菜单
 	document.getElementById('contextmenu_right').style.display='none';
 	// 完成右侧新建条目
@@ -97,14 +83,27 @@ document.onclick = function(this_ele,mydata){
 				document.getElementById('content_right').innerHTML+=xmlhttp.responseText;
 			}
 		}
-	xmlhttp.open('get','ajax.php?id='+mydata.selected_db_id+'name='+input_name+'&&url='+input_url,true);
+	xmlhttp.open('get','ajax.php?id='+selected_db_id+'name='+input_name+'&&url='+input_url,true);
 	xmlhttp.send();
 	}
 }
 
+// 关闭右侧新建条目
+// 若点击位置非新建条目，非右键菜单，且新建条目两表单均为空，则关闭
+// 如果把该功能直接加入document.onclick，会导致新建条目显示不出来
+
+// !!!
+
+$('div').not('#new_item').not('#contextmenu_right').click(function(){
+	if ($('#input_name').val()=='' && $('#input_url').val()==''){
+		$('#new_item').remove();
+	};
+});
+
+
 // 左侧目录单击事件函数
-// 参数1，this；参数2，被点击目录的数据库id；参数3，自定义数据对象mydata；
-function dir_click_left(this_ele,db_id,mydata){
+// 参数，被点击目录的数据库id；
+function dir_click_left(db_id){
 	// ajax更新右侧显示内容
 	var xmlhttp;
 	xmlhttp = new XMLHttpRequest();
@@ -117,43 +116,46 @@ function dir_click_left(this_ele,db_id,mydata){
 	xmlhttp.open('get','ajax.php?id='+db_id,true);
 	xmlhttp.send();
 	// 更改当前被点击目录的背景
-	if(mydata.selected_db_id!=db_id){
-		this_ele.style.border='1px solid rgb(84,155,247)';
-		this_ele.style.background='rgb(218,233,254)';
+	if(selected_db_id!=db_id){
+		this.style.border='1px solid rgb(84,155,247)';
+		this.style.background='rgb(218,233,254)';
 	}
 	// 更改前一次被点击目录的背景
-	if(mydata.selected_db_id){
-		previous=document.getElementById('db'+mydata.selected_db_id);
+	if(selected_db_id){
+		previous=document.getElementById('db'+selected_db_id);
 		previous.style.border='1px solid transparent';
 		previous.style.background='rgb(255,255,255)';
 	}
-	mydata.selected_db_id=db_id;
+	selected_db_id=db_id;
 }
 
 // 右侧用鼠标hover控制url显示状态
-function hover_dis(this_ele){
-	this_ele.childNodes[1].style.visibility='visible';
+function hover_dis(){
+	this.childNodes[1].style.visibility='visible';
 }
-function hover_in_dis(this_ele){
-	this_ele.childNodes[1].style.visibility='hidden';
+function hover_in_dis(){
+	this.childNodes[1].style.visibility='hidden';
 }
 
 // 右侧新建url
-function add_url(this_ele,mydata){
-	var new_form=document.createElement('form');
-	new_form.setAttribute('id','new_item');
-	var new_name=document.createElement('input');
-	new_name.setAttribute('id','input_name');
-	new_name.setAttribute('placeholder','名称');
-	var new_url=document.createElement('input');
-	new_url.setAttribute('id','input_url');
-	new_url.setAttribute('placeholder','网址');
-	new_form.appendChild(new_name);
-	new_form.appendChild(new_url);
-	document.getElementById('content_right').appendChild(new_form);
+function add_url(){
+	// 若新建条目不存在，则新建
+	if($('#new_item').length==0){
+		var new_form=document.createElement('form');
+		new_form.setAttribute('id','new_item');
+		var new_name=document.createElement('input');
+		new_name.setAttribute('id','input_name');
+		new_name.setAttribute('placeholder','名称');
+		var new_url=document.createElement('input');
+		new_url.setAttribute('id','input_url');
+		new_url.setAttribute('placeholder','网址');
+		new_form.appendChild(new_name);
+		new_form.appendChild(new_url);
+		document.getElementById('content_right').appendChild(new_form);
+	}
 }
 
 // 新建folder
-function add_folder(this_ele){
+function add_folder(){
 
 }

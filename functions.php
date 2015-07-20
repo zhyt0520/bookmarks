@@ -68,13 +68,13 @@ function dis_dir($conn){
 	// ！！！还是可以加一层循环，能够输出下面的样子
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='dir_click_left(this,".$res[$i]['Id'].",mydata)'>".$res[$i]['Name'].'</p>';
+			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='dir_click_left(".$res[$i]['Id'].")'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' onclick='dir_click_left(this,".$res[$j]['Id'].",mydata)'>".$res[$j]['Name'].'</p>';
+					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' onclick='dir_click_left(".$res[$j]['Id'].")'>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children(this)' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' onclick='dir_click_left(this,".$res[$k]['Id'].",mydata)'>".$res[$k]['Name'].'</p>';
+							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' onclick='dir_click_left(".$res[$k]['Id']."'>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}
@@ -91,7 +91,7 @@ function dis_dir($conn){
 function echo_db_res($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
-		$response.='<div class="item" onmouseover=hover_dis(this) onmouseout=hover_in_dis(this)><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
+		$response.='<div class="item" onmouseover=hover_dis() onmouseout=hover_in_dis()><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
 	}
 	return $response;
 }
