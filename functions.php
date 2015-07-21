@@ -14,6 +14,7 @@ function connect_db(){
 		if ($conn->query('show tables like "'.DB_TABLE.'"'==1)){
 			echo '数据表'.DB_TABLE.'已经存在，请检查config.php文件内的配置数据。';
 		}else{
+			// 若数据表DB_TABLE不存在，创建数据表
 			$query='create table bookmarks ('.
 				'Id int not null auto_increment,'.
 				'Depth int not null,'.
@@ -68,13 +69,13 @@ function dis_dir($conn){
 	// ！！！还是可以加一层循环，能够输出下面的样子
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='dir_click_left(".$res[$i]['Id'].")'>".$res[$i]['Name'].'</p>';
+			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='left_dir_click(".$res[$i]['Id'].",".$res[$i]['Depth'].")'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' onclick='dir_click_left(".$res[$j]['Id'].")'>".$res[$j]['Name'].'</p>';
+					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' onclick='left_dir_click(".$res[$j]['Id'].",".$res[$j]['Depth'].")'>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' onclick='dir_click_left(".$res[$k]['Id']."'>".$res[$k]['Name'].'</p>';
+							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' onclick='left_dir_click(".$res[$k]['Id'].",".$res[$k]['Depth'].")'>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}
@@ -88,7 +89,7 @@ function dis_dir($conn){
 }
 
 // 根据数据库返回结果循环输出右侧条目class=item
-function echo_db_res($res){
+function dis_db_res($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
 		$response.='<div class="item" onmouseover=hover_dis() onmouseout=hover_in_dis()><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
@@ -104,7 +105,7 @@ function dis_url($conn,$res){
 		$result=$conn->prepare($query);
 		$result->execute();
 		$res_url=$result->fetchall(PDO::FETCH_ASSOC);
-		$response=echo_db_res($res_url);
+		$response=dis_db_res($res_url);
 		echo $response;
 	}
 }
