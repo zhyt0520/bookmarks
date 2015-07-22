@@ -146,25 +146,26 @@ form{
 	border-radius: 2px;
 }
 /*右键菜单*/
-#contextmenu_right{
+#contextmenu{
 	min-width: 80px;
 	border: 1px solid #000;
 	background-color: #fff;
 	display: none;
 	position: fixed;
 }
-#contextmenu_right ul{
+#contextmenu ul{
 	margin: 7px 0;
 	padding: 0;
 }
-#contextmenu_right ul li{
+#contextmenu ul li{
 	margin: 3.5px 0;
 	padding: 0 7px;
 	list-style-type: none;
 }
-#contextmenu_right ul li:hover{
+#contextmenu ul li:hover{
 	background-color: #F1F7FF;
 }
+
 
 /*字体图标*/
 @font-face {font-family: "iconfont";

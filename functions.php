@@ -11,10 +11,8 @@ function connect_db(){
 		echo '数据库连接失败，请检查config.php文件内的配置数据。<br>错误信息：' . $e->getMessage(); 
 	}
 	if(isset($conn)){
-		if ($conn->query('show tables like "'.DB_TABLE.'"'==1)){
-			echo '数据表'.DB_TABLE.'已经存在，请检查config.php文件内的配置数据。';
-		}else{
-			// 若数据表DB_TABLE不存在，创建数据表
+		// 若数据表DB_TABLE不存在，创建数据表
+		if (!$conn->query('show tables like '.DB_TABLE)){
 			$query='create table bookmarks ('.
 				'Id int not null auto_increment,'.
 				'Depth int not null,'.
@@ -26,13 +24,13 @@ function connect_db(){
 			$result=$conn->prepare($query);
 			$result->execute();
 		}
-
 		return $conn;
 	}
 }
 
-// 查询目录并显示
-// 传入数据库连接conn，返回isdir=1的查询结果
+// 查询目录并在左侧显示
+// 传入参数：数据库连接$conn；
+// 返回isdir=1的查询结果$res
 function dis_dir($conn){
 	$query='select * from '.DB_TABLE.' where isdir = 1';
 	// $result=$conn->query('select * from zhyt where isdir=1');
@@ -40,33 +38,17 @@ function dis_dir($conn){
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
-	// 判断是否有子目录
-	// $has_children=array(count($res));
+	// 判断最外层depth=0的目录是否有子目录，用来控制左侧三角图标的显示
 	for($i=0;$i<count($res);$i++){
+		// 外层循环把所有都设置成hidden
 		$has_children[$i]="style='visibility:hidden'";
 		for($j=0;$j<count($res);$j++){
+			// 内层循环，如果第i个有子目录，设置成visible
 			if($res[$i]['Id']==$res[$j]['ParentId']){
 				$has_children[$i]="style='visibility:visible'";
 			}
 		}
 	}
-	// 循环输出左侧dir目录结构，只有三层深度
-	// 支持无限值深度怎么实现？确定最大值，然后用数组处理循环变量i,j,k？
-	// $res_depth=array_column($res,'Depth'); // 需要php版本5.5以上
-	// $res_depth_max=max($res_depth);
-	// $ijk=range(0,$res_depth_max);
-
-	// 最外层,即depth=0,循环输出（的前半部分，后面需补足分号和输出</div>）
-	
-	// 从第二次目录dir开始多重循环，循环变量m从1开始，而不是从0开始
-	// for($m=0;$m<$res_depth_max;$m++){
-	// 	for($ijk[$m]=0;$ijk[$m]<count($res);$ijk[$m]++){
-	// 		if()
-	// 	}
-	// }
-
-	// ！！！考虑是不是要整体改动左侧dir的输出结构
-	// ！！！还是可以加一层循环，能够输出下面的样子
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
 			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='left_dir_click(".$res[$i]['Id'].",".$res[$i]['Depth'].")'>".$res[$i]['Name'].'</p>';
@@ -88,7 +70,8 @@ function dis_dir($conn){
 	return $res;
 }
 
-// 根据数据库返回结果循环输出右侧条目class=item
+// 根据数据库返回结果循环输出右侧条目
+// 传入参数：数据库isdir=1的查询结果，二维数组
 function dis_db_res($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
@@ -98,6 +81,7 @@ function dis_db_res($res){
 }
 
 // 默认显示第一个目录下的书签
+// 传入参数：1、数据库连接；2、数据库isdir=1的查询结果
 function dis_url($conn,$res){
 	if(count($res)>0){
 		$frist_id=$res[0]['Id'];

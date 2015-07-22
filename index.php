@@ -11,7 +11,6 @@
 	<div id='top'>
 		<div class='content'>
 			<div>zhyt's bookmark.</div>
-			<div>js函数貌似不需要用参数来传递this，记得试验</div>
 		</div>
 	</div>
 	<div id='left'>

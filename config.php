@@ -1,6 +1,16 @@
 <?php
 
-// 需要提前建好下面数据库名称DB_NAME对应的数据库
+// 确保DB_NAME数据库内无DB_TABLE数据表，或者
+// 确保DB_TABLE数据表结构与下述符合：
+// 'Id int not null auto_increment,'.
+// 'Depth int not null,'.
+// 'ParentId int not null,'.
+// 'IsDir int not null,'.
+// 'Name varchar(100),'.
+// 'Url varchar(255) not null,'.
+// 'primary key(Id));'
+
+// 定义数据库信息
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'zhyt');
 define('DB_TABLE','bookmarks');
