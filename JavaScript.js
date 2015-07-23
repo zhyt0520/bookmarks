@@ -1,5 +1,5 @@
 // 全局变量
-//当前左侧被选中的目录的数据库id
+// 当前左侧被选中的目录的数据库id
 var selected_db_id=0;
 // 若左侧内容下有目录，把第一个目录的数据库id赋给selected_db_id，作为默认选中目录
 if($('#content_left').find('p').first().attr('id')){
@@ -7,8 +7,16 @@ if($('#content_left').find('p').first().attr('id')){
 	selected_db_id=$('#content_left').find('p').first().attr('id').substr(2);
 	$('#content_left').find('p').first().css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 }
-//当前左侧被选中的目录的数据库path
-var	selected_db_path=0;
+// 当前左侧被选中的目录的数据库path
+var	selected_db_depth=-1;
+// 设置变量控制右键菜单功能的启用与禁用
+var is_enable_contextmenu={
+	modify:false,
+	remove:false,
+	rename:false,
+	add_url:false,
+	add_folder:false
+}
 
 
 // 竖分隔线拖动
@@ -56,12 +64,21 @@ function toggle_children(){
 $(document).mousedown(function(){
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
-	// 右侧鼠标右击,出现自定义右键菜单,关闭左侧
+	// 右侧鼠标右击,出现自定义右键菜单
 	// 若鼠标右键按下，且点击事件的父元素有#right（即在右侧div内部点击的鼠标右键），获取鼠标位置并赋给右键菜单div
 	if(event.which==3 && $(event.target).closest('#right').length>0){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
+		// 控制右键菜单添加网页条目的功能
+		// 若左侧有当前选中目录selected_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
+		if(selected_db_id>0){
+			is_enable_contextmenu.add_url=true;
+			$('#add_url').css('color','rgb(0,0,0)');
+		}else{
+			is_enable_contextmenu.add_url=false;
+			$('#add_url').css('color','rgb(183,183,183)');
+		}
 	}
 	// 页面内左击，关闭右键菜单
 	// 若鼠标左键按下，且点击事件的父元素无右键菜单，关闭菜单
@@ -79,7 +96,7 @@ $(document).mousedown(function(){
 		var name=$('#input_name').val();
 		var url=$('#input_url').val();
 		// 用ajax传递数据id,depth,name,url给ajax.php，在右侧#content_right内加载返回内容
-		$('#content_right').load('ajax.php',{'mark':'new_item','id':selected_db_id,'depth':selected_db_path,'name':name,'url':url},function(response,status,xhr){
+		$('#content_right').load('ajax.php',{'mark':'new_item','id':selected_db_id,'depth':selected_db_depth,'name':name,'url':url},function(response,status,xhr){
 			// 如果失败，打印错误信息
 			if(status=='error'){
 				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
@@ -91,6 +108,43 @@ $(document).mousedown(function(){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
+		// 若鼠标右击对象为<p class='dir'>，则把对象的id赋给selected_db_id
+		if($(event.target).attr('class')=='dir'){
+			selected_db_id=$(event.target).attr('id').substr(2);
+		}
+		// 控制右键菜单添加网页条目的功能
+		// 若左侧有当前选中目录selected_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
+		if(selected_db_id>0){
+			is_enable_contextmenu.add_url=true;
+			$('#add_url').css('color','rgb(0,0,0)');
+		}else{
+			is_enable_contextmenu.add_url=false;
+			$('#add_url').css('color','rgb(183,183,183)');
+		}
+		// 获得点击对象的目录深度，控制右键菜单添加文件夹的功能，和条目文字颜色显示
+		var tree=$(event.target).parent().attr('class');
+		switch(tree){
+			case 'tree0':
+			selected_db_depth=0;
+			is_enable_contextmenu.add_folder=true;
+			break;
+			case 'tree1':
+			selected_db_depth=1;
+			is_enable_contextmenu.add_folder=true;
+			break;
+			case 'tree2':
+			selected_db_depth=2;
+			is_enable_contextmenu.add_folder=false;
+			break;
+			default:
+			selected_db_depth=-1;
+			is_enable_contextmenu.add_folder=true;
+		}
+		if(is_enable_contextmenu.add_folder){
+			$('#add_folder').css('color','rgb(0,0,0)');
+		}else{
+			$('#add_folder').css('color','rgb(183,183,183)');
+		}
 	}
 })
 
@@ -119,8 +173,8 @@ function left_dir_click(db_id,db_depth){
 	}
 	// 把当前点击的左侧dir的数据库id记录入selected_db_id
 	selected_db_id=db_id;
-	// 把当前点击的左侧dir的数据库depth记录入selected_db_path
-	selected_db_path=db_depth;
+	// 把当前点击的左侧dir的数据库depth记录入selected_db_depth
+	selected_db_depth=db_depth;
 }
 
 
@@ -132,10 +186,11 @@ function hover_in_dis(){
 	this.childNodes[1].style.visibility='hidden';
 }
 
-// 右侧右键菜单，添加网页
+// 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目
-if(selected_db_id>0){
-	$('#add_url').click(function(){
+$('#add_url').click(function(){
+	// is_enable_contextmenu.add_url为真，才有执行的语句
+	if(is_enable_contextmenu.add_url){
 		// 若新建条目不存在，则新建
 		if($('#new_item').length==0){
 			var new_form=document.createElement('form');
@@ -152,10 +207,19 @@ if(selected_db_id>0){
 		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
-	})
-// 若左侧无当前选中目录，菜单文字变灰，无功能
-}else{
-	$('#add_url').css('color','rgb(183,183,183)');
-}
+	}
+})
 
 
+// 右键菜单条目，添加文件夹
+// 获取点击事件目标的数据库id和depth，新建新文件夹
+$('#add_folder').click(function(){
+	// is_enable_contextmenu.add_folder为真，才有执行的语句
+	if(is_enable_contextmenu.add_folder){
+
+
+
+		// 关闭菜单
+		$('#contextmenu').css('display','none');
+	}
+})
