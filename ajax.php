@@ -3,6 +3,7 @@
 require 'config.php';
 require 'functions.php';
 
+
 // 左侧目录点击后更新右侧内容
 // 获取当前被点击的左侧目录的数据库id，查询其下属网址条目，输出右侧html内容，并返回
 if(isset($_GET['mark'],$_GET['id']) && $_GET['mark']=='left_dir_click'){
@@ -17,6 +18,7 @@ if(isset($_GET['mark'],$_GET['id']) && $_GET['mark']=='left_dir_click'){
 	$response=dis_db_res($res);
 	echo $response;
 }
+
 
 // 新建右侧条目
 // 传递参数：id为当前左侧选中dir的数据库id；name和url为新建条目的名称和网址；返回右侧conten_right的内容
@@ -40,5 +42,10 @@ if(isset($_REQUEST['mark'],$_REQUEST['id'],$_REQUEST['depth'],$_REQUEST['name'],
 	$response=dis_db_res($res);
 	echo $response;
 }
+
+
+// 新建左侧文件夹
+
+// ！！！检查左侧文件夹右击触发右侧内容更新
 
 ?>

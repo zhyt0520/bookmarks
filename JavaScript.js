@@ -146,6 +146,23 @@ $(document).mousedown(function(){
 			$('#add_folder').css('color','rgb(183,183,183)');
 		}
 	}
+	// 页面内左击，删除新建文件夹form
+	// 若鼠标左键按下，新建文件夹form存在，input_folder表单内容为空，点击事件的父元素无右键菜单、无新建文件夹form，删除新建文件夹form
+	if(event.which==1 && $('#new_folder') && $('#input_folder').val()=='' && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0){
+		$('#new_folder').remove();
+	}
+	// 页面内左击，完成新建文件夹
+	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹form，folder表单数据不为空，则数据传给ajax.php，关闭新建文件夹form，显示新建结果
+	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
+		var folder=$('#input_folder').val();
+		// 用ajax传递数据id,depth,folder给ajax.php，在左侧#content_left内加载返回内容
+		$('#content_left').load('ajax.php',{'mark':'new_folder','id':selected_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
+			// 如果失败，打印错误信息
+			if(status=='error'){
+				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
+			}
+		})
+	}
 })
 
 
@@ -216,9 +233,16 @@ $('#add_url').click(function(){
 $('#add_folder').click(function(){
 	// is_enable_contextmenu.add_folder为真，才有执行的语句
 	if(is_enable_contextmenu.add_folder){
-
-
-
+		// 若新建文件夹form不存在，则新建
+		if($('#new_folder').length==0){
+			// 左侧内容空白处右击
+			if(selected_db_depth==-1){
+				$('#content_left').append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+			// 左侧文件夹上右击
+			}else{
+				$('#db'+selected_db_id).append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+			}
+		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}

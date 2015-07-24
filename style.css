@@ -93,7 +93,7 @@ p{
 	border-radius: 2px;
 }
 .dir:hover{
-	/*添加!important可以提高css优先级，否则js的.style.strr会比css优先级高*/
+	/*添加!important可以提高css优先级，否则js的.style.sttr会比css优先级高*/
 	background-color: hsl(214, 91%, 97%) !important;
 	border: 1px solid hsl(214, 91%, 85%) !important;
 	border-radius: 2px !important;
