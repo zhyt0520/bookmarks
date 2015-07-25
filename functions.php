@@ -18,8 +18,8 @@ function connect_db(){
 				'Depth int not null,'.
 				'ParentId int not null,'.
 				'IsDir int not null,'.
-				'Name varchar(100),'.
-				'Url varchar(255) not null,'.
+				'Name varchar(100) not null,'.
+				'Url varchar(255),'.
 				'primary key(Id));';
 			$result=$conn->prepare($query);
 			$result->execute();
@@ -38,6 +38,14 @@ function dis_dir($conn){
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
+	echo echo_left($res);
+	return $res;
+}
+
+
+// 根据数据库返回结果循环输出左侧目录
+// 传入参数：数据库的查询结果，二维数组
+function echo_left($res){
 	// 判断最外层depth=0的目录是否有子目录，用来控制左侧三角图标的显示
 	for($i=0;$i<count($res);$i++){
 		// 外层循环把所有都设置成hidden
@@ -49,6 +57,7 @@ function dis_dir($conn){
 			}
 		}
 	}
+	// 三层循环输出左侧目录树
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
 			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='left_dir_click(".$res[$i]['Id'].",".$res[$i]['Depth'].")'>".$res[$i]['Name'].'</p>';
@@ -67,12 +76,12 @@ function dis_dir($conn){
 			echo '</div>';
 		}
 	}
-	return $res;
 }
 
+
 // 根据数据库返回结果循环输出右侧条目
-// 传入参数：数据库isdir=1的查询结果，二维数组
-function dis_db_res($res){
+// 传入参数：数据库的查询结果，二维数组
+function echo_right($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
 		$response.='<div class="item" onmouseover=hover_dis() onmouseout=hover_in_dis()><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
@@ -89,8 +98,7 @@ function dis_url($conn,$res){
 		$result=$conn->prepare($query);
 		$result->execute();
 		$res_url=$result->fetchall(PDO::FETCH_ASSOC);
-		$response=dis_db_res($res_url);
-		echo $response;
+		echo echo_right($res_url);
 	}
 }
 

@@ -15,7 +15,7 @@ var is_enable_contextmenu={
 	remove:false,
 	rename:false,
 	add_url:false,
-	add_folder:false
+	add_folder:true
 }
 
 
@@ -41,21 +41,18 @@ document.onmouseup = function(){
 
 // 左侧目录点击后显示和隐藏子目录
 function toggle_children(){
-	var child_div=this.parentNode.childNodes;
+	var child_div=$(event.target).parent().children('div');
 	for(var i=0;i<child_div.length;i++){
-		// 需要分辨是儿子还是孙子
-		if(child_div[i].nodeName=='DIV'){
-			if(child_div[i].style.display=='block'){
-				child_div[i].style.display='none';
-			}else{
-				child_div[i].style.display='block';
-			}
+		if(child_div[i].style.display=='block'){
+			child_div[i].style.display='none';
+		}else{
+			child_div[i].style.display='block';
 		}
 	}
-	if(this.className=='iconfont icon-xiangxia'){
-		this.className='iconfont icon-xiangyou';
+	if($(event.target).attr('class')=='iconfont icon-xiangxia'){
+		$(event.target).attr('class','iconfont icon-xiangyou');
 	}else{
-		this.className='iconfont icon-xiangxia';
+		$(event.target).attr('class','iconfont icon-xiangxia');
 	}
 }
 
@@ -91,8 +88,8 @@ $(document).mousedown(function(){
 		$('#new_item').remove();
 	}
 	// 页面内左击，完成新建条目
-	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建条目，url表单数据不为空，则数据传给ajax.php，关闭新建条目，显示新建结果
-	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_item').length==0 && $('#input_url').val()){
+	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建条目，name表单数据不为空,url表单数据不为空，则数据传给ajax.php，关闭新建条目，显示新建结果
+	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_item').length==0 && $('#input_name').val() && $('#input_url').val()){
 		var name=$('#input_name').val();
 		var url=$('#input_url').val();
 		// 用ajax传递数据id,depth,name,url给ajax.php，在右侧#content_right内加载返回内容
@@ -108,7 +105,7 @@ $(document).mousedown(function(){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-		// 若鼠标右击对象为<p class='dir'>，则把对象的id赋给selected_db_id
+		// 若鼠标右击对象为<p class='dir'>，则把对象的id数字赋给selected_db_id
 		if($(event.target).attr('class')=='dir'){
 			selected_db_id=$(event.target).attr('id').substr(2);
 		}
@@ -155,13 +152,21 @@ $(document).mousedown(function(){
 	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹form，folder表单数据不为空，则数据传给ajax.php，关闭新建文件夹form，显示新建结果
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
 		var folder=$('#input_folder').val();
-		// 用ajax传递数据id,depth,folder给ajax.php，在左侧#content_left内加载返回内容
-		$('#content_left').load('ajax.php',{'mark':'new_folder','id':selected_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
+		var last_insert_id;
+		// 用ajax传递数据id,depth,folder给ajax.php
+		$.post('ajax.php',{'mark':'new_folder','id':selected_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
 			// 如果失败，打印错误信息
 			if(status=='error'){
 				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
 			}
+			// 数据库返回最近一次插入数据的id
+			last_insert_id=response;
 		})
+		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="iconfont icon-xiangyou" onclick="toggle_children()" style="visibility:hidden"></i><p class="dir" id="db'+last_insert_id+'" onclick="left_dir_click('+last_insert_id+','+(selected_db_depth+1)+')">'+folder+'</p></div>';
+		$('#db'+selected_db_id).parent().children().last().after(new_folder_html);
+		$('#db'+selected_db_id).parent().children().last().css('display','block');
+		$('#new_folder').remove();
+
 	}
 })
 
@@ -185,7 +190,7 @@ function left_dir_click(db_id,db_depth){
 		$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 	}
 	// 更改前一次被点击目录的背景
-	if(selected_db_id){
+	if(selected_db_id && selected_db_id!=db_id){
 		$('#db'+selected_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 	}
 	// 把当前点击的左侧dir的数据库id记录入selected_db_id
@@ -240,7 +245,8 @@ $('#add_folder').click(function(){
 				$('#content_left').append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
 			// 左侧文件夹上右击
 			}else{
-				$('#db'+selected_db_id).append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+				$('#db'+selected_db_id).parent().children().last().after('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+				$('#new_folder').css('display','block');
 			}
 		}
 		// 关闭菜单

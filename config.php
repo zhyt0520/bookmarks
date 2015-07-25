@@ -12,9 +12,9 @@
 
 // 定义数据库信息
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'zhyt');
+define('DB_NAME', 'test');
 define('DB_TABLE','bookmarks');
-define('DB_USER', 'zhyt');
-define('DB_PASSWORD', 'zhyt0520');
+define('DB_USER', 'test');
+define('DB_PASSWORD', '123456');
 
 ?>

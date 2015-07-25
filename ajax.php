@@ -1,5 +1,6 @@
 <?php
 
+
 require 'config.php';
 require 'functions.php';
 
@@ -14,8 +15,8 @@ if(isset($_GET['mark'],$_GET['id']) && $_GET['mark']=='left_dir_click'){
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
-	// 调用函数dis_db_res根据数据库查询结果输出右侧html内容
-	$response=dis_db_res($res);
+	// 调用函数echo_right根据数据库查询结果输出右侧html内容
+	$response=echo_right($res);
 	echo $response;
 }
 
@@ -38,14 +39,29 @@ if(isset($_REQUEST['mark'],$_REQUEST['id'],$_REQUEST['depth'],$_REQUEST['name'],
 	$result=$conn->prepare($query);
 	$result->execute();
 	$res=$result->fetchall(PDO::FETCH_ASSOC);
-	// 调用函数dis_db_res根据数据库查询结果输出右侧html内容
-	$response=dis_db_res($res);
+	// 调用函数echo_right根据数据库查询结果输出右侧html内容
+	$response=echo_right($res);
 	echo $response;
 }
 
 
 // 新建左侧文件夹
+// 传递参数：folder为新建文件夹名称；返回左侧conten_left的内容
+if(isset($_REQUEST['mark'],$_REQUEST['id'],$_REQUEST['depth'],$_REQUEST['folder']) && $_REQUEST['mark']=='new_folder'){
+	$id=$_REQUEST['id'];
+	$depth=$_REQUEST['depth'];
+	$folder=$_REQUEST['folder'];
+	$conn=connect_db();
+	$query='insert into '.DB_TABLE.
+		'(Id,Depth,ParentId,IsDir,Name,Url) '.
+		'values '.
+		'(null,'.($depth+1).','.$id.',1,"'.$folder.'",null);';
+	$result=$conn->prepare($query);
+	$result->execute();
+	// 查询最近一次插入数据的id
+	$result=$conn->query('select last_insert_id()');
+	echo $result;
+}
 
-// ！！！检查左侧文件夹右击触发右侧内容更新
 
 ?>
