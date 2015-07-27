@@ -108,15 +108,9 @@ $(document).mousedown(function(){
 		// 若鼠标右击对象为<p class='dir'>，则把对象的id数字赋给selected_db_id
 		if($(event.target).attr('class')=='dir'){
 			selected_db_id=$(event.target).attr('id').substr(2);
-		}
-		// 控制右键菜单添加网页条目的功能
-		// 若左侧有当前选中目录selected_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
-		if(selected_db_id>0){
-			is_enable_contextmenu.add_url=true;
-			$('#add_url').css('color','rgb(0,0,0)');
+		// 否则是在左侧空白处右击，当前选中id应为0
 		}else{
-			is_enable_contextmenu.add_url=false;
-			$('#add_url').css('color','rgb(183,183,183)');
+			selected_db_id=0;
 		}
 		// 获得点击对象的目录深度，控制右键菜单添加文件夹的功能，和条目文字颜色显示
 		var tree=$(event.target).parent().attr('class');
@@ -201,6 +195,7 @@ function left_dir_click(db_id,db_depth){
 
 
 // 右侧用鼠标hover控制url显示状态
+// ！！！this存在问题
 function hover_dis(){
 	this.childNodes[1].style.visibility='visible';
 }
