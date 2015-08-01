@@ -61,21 +61,21 @@ function toggle_children(){
 $(document).mousedown(function(){
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
+	// 控制右键菜单添加网页条目的功能
+	// 若左侧有当前选中目录selected_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
+	if(selected_db_id>0){
+		is_enable_contextmenu.add_url=true;
+		$('#add_url').css('color','rgb(0,0,0)');
+	}else{
+		is_enable_contextmenu.add_url=false;
+		$('#add_url').css('color','rgb(183,183,183)');
+	}
 	// 右侧鼠标右击,出现自定义右键菜单
 	// 若鼠标右键按下，且点击事件的父元素有#right（即在右侧div内部点击的鼠标右键），获取鼠标位置并赋给右键菜单div
 	if(event.which==3 && $(event.target).closest('#right').length>0){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-		// 控制右键菜单添加网页条目的功能
-		// 若左侧有当前选中目录selected_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
-		if(selected_db_id>0){
-			is_enable_contextmenu.add_url=true;
-			$('#add_url').css('color','rgb(0,0,0)');
-		}else{
-			is_enable_contextmenu.add_url=false;
-			$('#add_url').css('color','rgb(183,183,183)');
-		}
 	}
 	// 页面内左击，关闭右键菜单
 	// 若鼠标左键按下，且点击事件的父元素无右键菜单，关闭菜单
@@ -156,11 +156,14 @@ $(document).mousedown(function(){
 			// 数据库返回最近一次插入数据的id
 			last_insert_id=response;
 		})
+		// 显示当前点击目录的左侧的三角
+		if($('#db'+selected_db_id).prev().css('visibility')=='hidden'){
+			$('#db'+selected_db_id).prev().css('visibility','visible');
+		}
 		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="iconfont icon-xiangyou" onclick="toggle_children()" style="visibility:hidden"></i><p class="dir" id="db'+last_insert_id+'" onclick="left_dir_click('+last_insert_id+','+(selected_db_depth+1)+')">'+folder+'</p></div>';
 		$('#db'+selected_db_id).parent().children().last().after(new_folder_html);
 		$('#db'+selected_db_id).parent().children().last().css('display','block');
 		$('#new_folder').remove();
-
 	}
 })
 
@@ -197,10 +200,12 @@ function left_dir_click(db_id,db_depth){
 // 右侧用鼠标hover控制url显示状态
 // ！！！this存在问题
 function hover_dis(){
-	this.childNodes[1].style.visibility='visible';
+	$(event.target).next().css('visibility','visible');
+	// this.childNodes[1].style.visibility='visible';
 }
 function hover_in_dis(){
-	this.childNodes[1].style.visibility='hidden';
+	$(event.target).next().css('visibility','hidden');
+	// this.childNodes[1].style.visibility='hidden';
 }
 
 // 右键菜单条目，添加网页

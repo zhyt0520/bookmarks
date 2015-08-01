@@ -23,6 +23,6 @@
 	</div>
 	<?php require 'contextmenu.php' ?>
 	<script type="text/javascript" src="jquery-1.11.3.js"></script>
-	<script type="text/javascript" src="javascript.js"></script>
+	<script type="text/javascript" src="bookmarks.js"></script>
 </body>
 </html>
