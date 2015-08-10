@@ -1,0 +1,192 @@
+/*整体*/
+html{
+	height: 95%;
+}
+body{
+	height: 100%;
+	cursor: default;
+	font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
+}
+body{
+	/*禁止页面复制选中文本*/
+	-moz-user-select: none; /*火狐*/
+	-webkit-user-select: none; /*webkit浏览器*/
+	-ms-user-select: none; /*IE10*/
+	-khtml-user-select: none; /*早期浏览器*/
+	user-select: none;
+}
+p{
+	margin: 0;
+	padding: 0;
+}
+#page{
+	width: 100%;
+	height: 100%;
+}
+/*实验*/
+/*#triangle_up{
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 50px solid red;
+}*/
+/*布局*/
+#top{
+	height: 10%;
+	border: 1px solid #000;
+ 	border-bottom: 0px;
+}
+#left{
+	width: 200px;
+	height: 90%;
+	border: 1px solid #000;
+	float: left;
+	display: inline;
+	overflow:auto;
+}
+#line{
+	float: left;
+	display: inline;
+	width: 0px;
+	height: 90%;
+	border: 2px solid transparent; /*透明*/
+	cursor: e-resize;
+}
+#right{
+	width: auto;
+	height: 90%;
+	border: 1px solid #000;
+	overflow:auto;
+}
+.content{
+	margin: 7px;
+}
+/*左侧*/
+.tree0{
+	display: block;
+	/*border: 1px solid #999;*/
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
+}
+.tree1{
+	display: none;
+	/*border: 1px solid #999;*/
+	padding-left: 20px;
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
+}
+.tree2{
+	display: none;
+	/*border: 1px solid #999;*/
+	padding-left: 20px;
+	overflow: hidden; /*文字超出边界显示三点*/
+	text-overflow: ellipsis; /*文字超出边界显示三点*/
+	white-space: nowrap; /*文字超出边界显示三点*/
+}
+.dir{
+	padding: 0 3.5px;
+	display: inline-block;
+	border: 1px solid transparent;
+	border-radius: 2px;
+}
+.dir:hover{
+	/*添加!important可以提高css优先级，否则js的.style.sttr会比css优先级高*/
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
+}
+#input_folder{
+	width: 120px;
+}
+/*右侧*/
+.item{
+	border: 1px solid transparent;
+	border-radius: 2px;
+}
+.item:hover{
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
+}
+.name{
+	padding: 0 3.5px 2px 3.5px;
+	display: inline-block;
+}
+.url{
+	color: rgb(179,179,179);
+	margin-left: 14px;
+	padding: 0 3.5px 2px 3.5px;
+	display: inline-block;
+	visibility: hidden;
+}
+form{
+	padding: 0 3.5px 2px 3.5px;
+	margin: 0px;
+}
+#new_item{
+	/*vertical-align: middle;*/
+	border: 1px solid transparent;
+	border-radius: 2px !important;
+	background-color: rgb(240,240,240);
+}
+#new_item:hover{
+	background-color: hsl(214, 91%, 97%) !important;
+	border: 1px solid hsl(214, 91%, 85%) !important;
+	border-radius: 2px !important;
+}
+#input_name{
+	width: 100px;
+	border: 1px solid rgb(191,191,191);
+	border-radius: 2px;
+}
+#input_url{
+	width: 200px;
+	margin-left: 7px;
+	border: 1px solid rgb(191,191,191);
+	border-radius: 2px;
+}
+/*右键菜单*/
+#contextmenu{
+	min-width: 80px;
+	border: 1px solid #000;
+	background-color: #fff;
+	display: none;
+	position: fixed;
+}
+#contextmenu ul{
+	margin: 7px 0;
+	padding: 0;
+}
+#contextmenu ul li{
+	margin: 3.5px 0;
+	padding: 0 7px;
+	list-style-type: none;
+}
+#contextmenu ul li:hover{
+	background-color: #F1F7FF;
+}
+
+
+/*字体图标*/
+@font-face {font-family: "iconfont";
+  src: url('iconfont/iconfont.eot'); /* IE9*/
+  src: url('iconfont/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont/iconfont.woff') format('woff'), /* chrome、firefox */
+  url('iconfont/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:12px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline;
+  color: rgb(173,173,173);
+}
+.icon-xiangxia:before { content: "\f01a6"; }
+.icon-xiangyou:before { content: "\f01a9"; }
