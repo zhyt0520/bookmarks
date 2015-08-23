@@ -198,15 +198,12 @@ function left_dir_click(db_id,db_depth){
 
 
 // 右侧用鼠标hover控制url显示状态
-// ！！！this存在问题
-function hover_dis(){
-	$(event.target).next().css('visibility','visible');
-	// this.childNodes[1].style.visibility='visible';
-}
-function hover_in_dis(){
-	$(event.target).next().css('visibility','hidden');
-	// this.childNodes[1].style.visibility='hidden';
-}
+$('.item').mouseenter(function(){
+	$(event.target).children('.url').css('visibility','visible');
+	});
+$('.item').mouseleave(function(){
+	$(event.target).children('.url').css('visibility','hidden');
+	});
 
 // 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目

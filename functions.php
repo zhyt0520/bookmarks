@@ -84,7 +84,7 @@ function echo_left($res){
 function echo_right($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
-		$response.='<div class="item" onmouseover=hover_dis() onmouseout=hover_in_dis()><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
+		$response.='<div class="item"><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
 	}
 	return $response;
 }
