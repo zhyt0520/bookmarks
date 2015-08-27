@@ -60,13 +60,13 @@ function echo_left($res){
 	// 三层循环输出左侧目录树
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' onclick='left_dir_click(".$res[$i]['Id'].",".$res[$i]['Depth'].")'>".$res[$i]['Name'].'</p>';
+			echo "<div class='tree0'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' >".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' onclick='left_dir_click(".$res[$j]['Id'].",".$res[$j]['Depth'].")'>".$res[$j]['Name'].'</p>';
+					echo "<div class='tree1'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' '>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' onclick='left_dir_click(".$res[$k]['Id'].",".$res[$k]['Depth'].")'>".$res[$k]['Name'].'</p>';
+							echo "<div class='tree2'><i class='iconfont icon-xiangyou' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' '>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}

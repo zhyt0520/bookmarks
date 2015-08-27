@@ -7,9 +7,9 @@ require 'functions.php';
 
 // 左侧目录点击后更新右侧内容
 // 获取当前被点击的左侧目录的数据库id，查询其下属网址条目，输出右侧html内容，并返回
-if(isset($_GET['mark'],$_GET['id']) && $_GET['mark']=='left_dir_click'){
+if(isset($_REQUEST['mark'],$_REQUEST['id']) && $_REQUEST['mark']=='left_dir_click'){
 	// 获取XMLHttpRequest传输的数据id
-	$id=$_GET['id'];
+	$id=$_REQUEST['id'];
 	$conn=connect_db();
 	$query='select * from '.DB_TABLE.' where parentid = '.$id.' and isdir = 0';
 	$result=$conn->prepare($query);

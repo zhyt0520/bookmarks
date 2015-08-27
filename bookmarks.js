@@ -59,6 +59,9 @@ function toggle_children(){
 
 // 页面内鼠标按下事件
 $(document).mousedown(function(){
+
+	// 零，无位置
+
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
 	// 控制右键菜单添加网页条目的功能
@@ -70,13 +73,9 @@ $(document).mousedown(function(){
 		is_enable_contextmenu.add_url=false;
 		$('#add_url').css('color','rgb(183,183,183)');
 	}
-	// 右侧鼠标右击,出现自定义右键菜单
-	// 若鼠标右键按下，且点击事件的父元素有#right（即在右侧div内部点击的鼠标右键），获取鼠标位置并赋给右键菜单div
-	if(event.which==3 && $(event.target).closest('#right').length>0){
-		var x=event.clientX;
-		var y=event.clientY;
-		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-	}
+
+	// 一，整个页面
+
 	// 页面内左击，关闭右键菜单
 	// 若鼠标左键按下，且点击事件的父元素无右键菜单，关闭菜单
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0){
@@ -99,6 +98,55 @@ $(document).mousedown(function(){
 				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
 			}
 		})
+	}
+	// 页面内左击，删除新建文件夹form
+	// 若鼠标左键按下，新建文件夹form存在，input_folder表单内容为空，点击事件的父元素无右键菜单、无新建文件夹form，删除新建文件夹form
+	if(event.which==1 && $('#new_folder') && $('#input_folder').val()=='' && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0){
+		$('#new_folder').remove();
+	}
+	// 页面内左击，完成新建文件夹
+	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹form，folder表单数据不为空，则数据传给ajax.php，关闭新建文件夹form，显示新建结果
+	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
+		var folder=$('#input_folder').val();
+		var last_insert_id;
+		// 用ajax传递数据id,depth,folder给ajax.php
+		$.post('ajax.php',{'mark':'new_folder','id':selected_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
+			// 如果失败，打印错误信息
+			if(status=='error'){
+				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
+			}
+			// 数据库返回最近一次插入数据的id
+			last_insert_id=response;
+		})
+		// 显示当前点击目录的左侧的三角
+		if($('#db'+selected_db_id).prev().css('visibility')=='hidden'){
+			$('#db'+selected_db_id).prev().css('visibility','visible');
+		}
+		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="iconfont icon-xiangyou" onclick="toggle_children()" style="visibility:hidden"></i><p class="dir" id="db'+last_insert_id+'" onclick="left_dir_click('+last_insert_id+','+(selected_db_depth+1)+')">'+folder+'</p></div>';
+		$('#db'+selected_db_id).parent().children().last().after(new_folder_html);
+		$('#db'+selected_db_id).parent().children().last().css('display','block');
+		$('#new_folder').remove();
+	}
+
+	// 二，左侧
+
+	// 左侧鼠标左击目录，改变css，更新右侧的内容显示，更新全局变量
+	// ！！！ ajax更新过后，右侧条目的事件代码失效
+	if(event.which==1 && $(event.target).closest('#left').length>0 && $(event.target).attr('class')=='dir'){
+		var db_id=$(event.target).attr('id').substr(2);
+		var db_depth=$(event.target).parent().attr('class').substr(4);
+		$('#content_right').load('ajax.php',{'mark':'left_dir_click','id':db_id},function(response,status,xhr){
+			// 如果失败，打印错误信息
+			if(status=='error'){
+				console.log('xhr.status:'+xhr.status+', xhr.statusText:'+xhr.statusText)
+			}
+		})
+		if(db_id!=selected_db_id){
+			$('#db'+selected_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+			selected_db_id=db_id;
+			selected_db_depth=db_depth;
+		}
 	}
 	// 左侧鼠标右击，出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#left').length>0){
@@ -137,73 +185,76 @@ $(document).mousedown(function(){
 			$('#add_folder').css('color','rgb(183,183,183)');
 		}
 	}
-	// 页面内左击，删除新建文件夹form
-	// 若鼠标左键按下，新建文件夹form存在，input_folder表单内容为空，点击事件的父元素无右键菜单、无新建文件夹form，删除新建文件夹form
-	if(event.which==1 && $('#new_folder') && $('#input_folder').val()=='' && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0){
-		$('#new_folder').remove();
+
+	// 三，右侧
+
+	// 右侧鼠标右击,出现自定义右键菜单
+	// 若鼠标右键按下，且点击事件的父元素有#right（即在右侧div内部点击的鼠标右键），获取鼠标位置并赋给右键菜单div
+	if(event.which==3 && $(event.target).closest('#right').length>0){
+		var x=event.clientX;
+		var y=event.clientY;
+		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 	}
-	// 页面内左击，完成新建文件夹
-	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹form，folder表单数据不为空，则数据传给ajax.php，关闭新建文件夹form，显示新建结果
-	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
-		var folder=$('#input_folder').val();
-		var last_insert_id;
-		// 用ajax传递数据id,depth,folder给ajax.php
-		$.post('ajax.php',{'mark':'new_folder','id':selected_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
-			// 如果失败，打印错误信息
-			if(status=='error'){
-				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
-			}
-			// 数据库返回最近一次插入数据的id
-			last_insert_id=response;
-		})
-		// 显示当前点击目录的左侧的三角
-		if($('#db'+selected_db_id).prev().css('visibility')=='hidden'){
-			$('#db'+selected_db_id).prev().css('visibility','visible');
-		}
-		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="iconfont icon-xiangyou" onclick="toggle_children()" style="visibility:hidden"></i><p class="dir" id="db'+last_insert_id+'" onclick="left_dir_click('+last_insert_id+','+(selected_db_depth+1)+')">'+folder+'</p></div>';
-		$('#db'+selected_db_id).parent().children().last().after(new_folder_html);
-		$('#db'+selected_db_id).parent().children().last().css('display','block');
-		$('#new_folder').remove();
-	}
+	// 右侧鼠标左击条目，改变css
 })
 
 
 // 左侧目录单击事件函数
 // 参数，被点击目录的数据库id；
-function left_dir_click(db_id,db_depth){
-	// ajax更新右侧显示内容
-	var xmlhttp;
-	xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange=function(){
-		if(xmlhttp.readyState==4 && xmlhttp.status==200){
-			// 把服务器返回内容填充到右侧二级div内<div id='content_right' class='content'></div>
-			document.getElementById('content_right').innerHTML=xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open('get','ajax.php?mark=left_dir_click&id='+db_id,true);
-	xmlhttp.send();
-	// 更改当前被点击目录的背景
-	if(selected_db_id!=db_id){
-		$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
-	}
-	// 更改前一次被点击目录的背景
-	if(selected_db_id && selected_db_id!=db_id){
-		$('#db'+selected_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
-	}
-	// 把当前点击的左侧dir的数据库id记录入selected_db_id
-	selected_db_id=db_id;
-	// 把当前点击的左侧dir的数据库depth记录入selected_db_depth
-	selected_db_depth=db_depth;
-}
+// ！！！整合到document的mousedown里面
+// function left_dir_click(db_id,db_depth){
+// 	// ajax更新右侧显示内容
+// 	var xmlhttp;
+// 	xmlhttp = new XMLHttpRequest();
+// 	xmlhttp.onreadystatechange=function(){
+// 		if(xmlhttp.readyState==4 && xmlhttp.status==200){
+// 			// 把服务器返回内容填充到右侧二级div内<div id='content_right' class='content'></div>
+// 			document.getElementById('content_right').innerHTML=xmlhttp.responseText;
+// 		}
+// 	}
+// 	xmlhttp.open('get','ajax.php?mark=left_dir_click&id='+db_id,true);
+// 	xmlhttp.send();
+// 	// 更改当前被点击目录的背景
+// 	if(selected_db_id!=db_id){
+// 		$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+// 	}
+// 	// 更改前一次被点击目录的背景
+// 	if(selected_db_id && selected_db_id!=db_id){
+// 		$('#db'+selected_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+// 	}
+// 	// 把当前点击的左侧dir的数据库id记录入selected_db_id
+// 	selected_db_id=db_id;
+// 	// 把当前点击的左侧dir的数据库depth记录入selected_db_depth
+// 	selected_db_depth=db_depth;
+// }
 
 
 // 右侧用鼠标hover控制url显示状态
+// 最开始的时候用原始javascript，html里写事件，传递参数this，js的函数里只一句就够了。改了jq，mouse的事件受内部div影响，用了三个if。。。
+// ！！！点左侧目录，ajax以后，失效
 $('.item').mouseenter(function(){
-	$(event.target).children('.url').css('visibility','visible');
+	if($(event.target).attr('class')=='item'){
+		$(event.target).children('.url').css('visibility','visible');
+	}
+	if($(event.target).attr('class')=='name'){
+		$(event.target).next().css('visibility','visible');
+	}
+	if($(event.target).attr('class')=='url'){
+		$(event.target).css('visibility','visible');
+	}
 	});
 $('.item').mouseleave(function(){
-	$(event.target).children('.url').css('visibility','hidden');
+	if($(event.target).attr('class')=='item'){
+		$(event.target).children('.url').css('visibility','hidden');
+	}
+	if($(event.target).attr('class')=='name'){
+		$(event.target).next().css('visibility','hidden');
+	}
+	if($(event.target).attr('class')=='url'){
+		$(event.target).css('visibility','hidden');
+	}
 	});
+
 
 // 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目
