@@ -6,8 +6,8 @@
 // 'Depth int not null,'.
 // 'ParentId int not null,'.
 // 'IsDir int not null,'.
-// 'Name varchar(100),'.
-// 'Url varchar(255) not null,'.
+// 'Name varchar(100) not null,'.
+// 'Url varchar(255),'.
 // 'primary key(Id));'
 
 // 定义数据库信息

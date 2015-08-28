@@ -130,8 +130,7 @@ $(document).mousedown(function(){
 
 	// 二，左侧
 
-	// 左侧鼠标左击目录，改变css，更新右侧的内容显示，更新全局变量
-	// ！！！ ajax更新过后，右侧条目的事件代码失效
+	// 左侧鼠标左击目录，更新右侧的内容显示，改变css，更新全局变量
 	if(event.which==1 && $(event.target).closest('#left').length>0 && $(event.target).attr('class')=='dir'){
 		var db_id=$(event.target).attr('id').substr(2);
 		var db_depth=$(event.target).parent().attr('class').substr(4);
@@ -196,43 +195,24 @@ $(document).mousedown(function(){
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 	}
 	// 右侧鼠标左击条目，改变css
+	// ！！！考虑html内添加数据库id，然后类似左侧的selected_db_id，帮助控制当前选中条目的css，如当前选中条目的url一直显示
+	// ！！！学习正则表达式，根据资料，去掉css文件里的!important，用js控制css里面的:hover(资料在为知笔记：“jquery获取css中:hover的样式 , 只需要获取”)
+	if(event.which==1 && $(event.target).closest('.item').length>0){
+		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+		$('.url').css('visibility','hidden');
+		if($(event.target).attr('class')=='item'){
+			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+		}else{
+			$(event.target).parent().css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+		}
+	}
 })
-
-
-// 左侧目录单击事件函数
-// 参数，被点击目录的数据库id；
-// ！！！整合到document的mousedown里面
-// function left_dir_click(db_id,db_depth){
-// 	// ajax更新右侧显示内容
-// 	var xmlhttp;
-// 	xmlhttp = new XMLHttpRequest();
-// 	xmlhttp.onreadystatechange=function(){
-// 		if(xmlhttp.readyState==4 && xmlhttp.status==200){
-// 			// 把服务器返回内容填充到右侧二级div内<div id='content_right' class='content'></div>
-// 			document.getElementById('content_right').innerHTML=xmlhttp.responseText;
-// 		}
-// 	}
-// 	xmlhttp.open('get','ajax.php?mark=left_dir_click&id='+db_id,true);
-// 	xmlhttp.send();
-// 	// 更改当前被点击目录的背景
-// 	if(selected_db_id!=db_id){
-// 		$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
-// 	}
-// 	// 更改前一次被点击目录的背景
-// 	if(selected_db_id && selected_db_id!=db_id){
-// 		$('#db'+selected_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
-// 	}
-// 	// 把当前点击的左侧dir的数据库id记录入selected_db_id
-// 	selected_db_id=db_id;
-// 	// 把当前点击的左侧dir的数据库depth记录入selected_db_depth
-// 	selected_db_depth=db_depth;
-// }
 
 
 // 右侧用鼠标hover控制url显示状态
 // 最开始的时候用原始javascript，html里写事件，传递参数this，js的函数里只一句就够了。改了jq，mouse的事件受内部div影响，用了三个if。。。
-// ！！！点左侧目录，ajax以后，失效
-$('.item').mouseenter(function(){
+// 直接用mouseenter和mouseleave的话，ajax更新后事件失效。学习jq的bind, live, delegate, on区别
+$('#content_right').on('mouseenter','.item',function(){
 	if($(event.target).attr('class')=='item'){
 		$(event.target).children('.url').css('visibility','visible');
 	}
@@ -243,7 +223,7 @@ $('.item').mouseenter(function(){
 		$(event.target).css('visibility','visible');
 	}
 	});
-$('.item').mouseleave(function(){
+$('#content_right').on('mouseleave','.item',function(){
 	if($(event.target).attr('class')=='item'){
 		$(event.target).children('.url').css('visibility','hidden');
 	}
