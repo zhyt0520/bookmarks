@@ -130,6 +130,8 @@ $(document).mousedown(function(){
 			selected_dir_db_id=db_id;
 			selected_db_depth=db_depth;
 		}
+		// 更新被选中条目id
+		selected_item_db_id=null;
 	}
 	// 左侧鼠标右击，出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#left').length>0){
@@ -138,6 +140,8 @@ $(document).mousedown(function(){
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 		// 若鼠标右击对象为<p class='dir'>，则把对象的id数字赋给selected_dir_db_id
 		if($(event.target).attr('class')=='dir'){
+			$('.dir').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 			selected_dir_db_id=$(event.target).attr('id').substr(2);
 		// 否则是在左侧空白处右击，当前选中id应为0
 		}else{
@@ -167,6 +171,8 @@ $(document).mousedown(function(){
 		}else{
 			$('#add_folder').css('color','rgb(183,183,183)');
 		}
+		// 更新被选中条目id
+		selected_item_db_id=null;
 	}
 
 	// 三、右侧
@@ -180,7 +186,7 @@ $(document).mousedown(function(){
 	}
 	// 右侧鼠标左击条目，改变css
 	// ！！！学习正则表达式，根据资料，去掉css文件里的!important，用js控制css里面的:hover(资料在为知笔记：“jquery获取css中:hover的样式 , 只需要获取”)
-	if(event.which==1 && $(event.target).closest('.item').length>0){
+	if((event.which==1 || event.which==3) && $(event.target).closest('.item').length>0){
 		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 		$('.url').css('visibility','hidden');
 		if($(event.target).attr('class')=='item'){
@@ -198,6 +204,12 @@ $(document).mousedown(function(){
 			$(event.target).css('visibility','visible');
 			selected_item_db_id=$(event.target).parent().attr('id').substr(2);
 		}
+	}
+	// 在右侧空白处单击，更新css,更新当前选中条目id
+	if((event.which==1 || event.which==3) && $(event.target).attr('id')=='right'){
+		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+		$('.url').css('visibility','hidden');
+		selected_item_db_id=null;
 	}
 })
 
