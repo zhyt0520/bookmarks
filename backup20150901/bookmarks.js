@@ -275,23 +275,6 @@ $('#content_right').on('mouseleave','.item',function(){
 	});
 
 
-// 双击右侧条目，在新标签页打开相应url
-// ！！！ 用 this 优化前面用三个if判断event.target的代码
-// ！！！ 右侧条目里url的内容需要在存进数据库前进行格式限制，同样这里读取时，是不是还要再验证一次？
-// href里面用http还是https，应该如何确定和使用？
-// 左侧部分，小三角右侧添加文件夹打开和关闭的图标
-$('.item').dblclick(function(){
-	// note 这里用 this 可以不用辨别event.target到底是item还是name还是url，这里的this一直是item
-	var url=$(this).children('.url').text().substr(5);
-	var a=$('<a href="http://'+url+'" target="_blank"></a>').get(0);
-	var e=document.createEvent('MouseEvents');
-	e.initEvent('click',true,true);
-	a.dispatchEvent(e);
-});
-
-
-// 下面是右键菜单的代码
-
 // 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目
 $('#add_url').click(function(){
@@ -314,7 +297,7 @@ $('#add_url').click(function(){
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}
-});
+})
 
 
 // 右键菜单条目，添加文件夹
