@@ -48,25 +48,24 @@ function dis_dir($conn){
 function echo_left($res){
 	// 判断最外层depth=0的目录是否有子目录，用来控制左侧三角图标的显示
 	for($i=0;$i<count($res);$i++){
-		// 外层循环把所有都设置成hidden
-		$has_children[$i]="style='visibility:hidden'";
+		$has_children[$i]='folder_only';
 		for($j=0;$j<count($res);$j++){
-			// 内层循环，如果第i个有子目录，设置成visible
+			// 内层循环，如果第i个有子目录，class设置成tringle_right
 			if($res[$i]['Id']==$res[$j]['ParentId']){
-				$has_children[$i]="style='visibility:visible'";
+				$has_children[$i]='tringle_right';
 			}
 		}
 	}
 	// 三层循环输出左侧目录树
 	for($i=0;$i<count($res);$i++){
 		if($res[$i]['Depth']==0){
-			echo "<div class='tree0'><i class='tringle_right' onclick='toggle_children()' ".$has_children[$i]."></i><p class='dir' id='db".$res[$i]['Id']."' ondblclick='toggle_children()'>".$res[$i]['Name'].'</p>';
+			echo "<div class='tree0'><i class='".$has_children[$i]."' onclick='toggle_children()'></i><p class='dir' id='db".$res[$i]['Id']."' ondblclick='toggle_children()'>".$res[$i]['Name'].'</p>';
 			for($j=0;$j<count($res);$j++){
 				if($res[$j]['ParentId']==$res[$i]['Id']){
-					echo "<div class='tree1'><i class='tringle_right' onclick='toggle_children()' ".$has_children[$j]."></i><p class='dir' id='db".$res[$j]['Id']."' ondblclick='toggle_children()'>".$res[$j]['Name'].'</p>';
+					echo "<div class='tree1'><i class='".$has_children[$j]."' onclick='toggle_children()'></i><p class='dir' id='db".$res[$j]['Id']."' ondblclick='toggle_children()'>".$res[$j]['Name'].'</p>';
 					for($k=0;$k<count($res);$k++){
 						if($res[$k]['ParentId']==$res[$j]['Id']){
-							echo "<div class='tree2'><i class='tringle_right' onclick='toggle_children()' ".$has_children[$k]."></i><p class='dir' id='db".$res[$k]['Id']."' ondblclick='toggle_children()'>".$res[$k]['Name'].'</p>';
+							echo "<div class='tree2'><i class='".$has_children[$k]."' onclick='toggle_children()'></i><p class='dir' id='db".$res[$k]['Id']."' ondblclick='toggle_children()'>".$res[$k]['Name'].'</p>';
 							echo '</div>';
 						}
 					}

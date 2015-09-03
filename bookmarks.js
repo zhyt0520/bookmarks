@@ -75,7 +75,7 @@ $(document).mousedown(function(){
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_item').length==0 && $('#input_name').val() && $('#input_url').val()){
 		var name=$('#input_name').val();
 		var url=$('#input_url').val();
-		// 用ajax传递数据id,depth,name,url给ajax.php，在右侧#content_right内加载返回内容
+		// 用ajax传递数据id,depth,name,url给ajax.php，在右侧 #content_right 内加载返回内容
 		$('#content_right').load('ajax.php',{'mark':'new_item','id':selected_dir_db_id,'depth':selected_db_depth,'name':name,'url':url},function(response,status,xhr){
 			// 如果失败，打印错误信息
 			if(status=='error'){
@@ -218,7 +218,8 @@ $(document).mousedown(function(){
 // note 该函数至于$(document).mousedown(function(){之前的话，会导致其内部的单击事件被屏蔽，放在其后面，则双击事件会分别执行一次单击和双击
 function toggle_children(){
 	var child_div=$(event.target).parent().children('div');
-	if($(event.target).attr('class')=='dir'){
+	// 切换子目录是否显示
+	if($(event.target)[0].tagName=='P'){
 		for(var i=0;i<child_div.length;i++){
 			if(child_div[i].style.display=='block'){
 				child_div[i].style.display='none';
@@ -228,10 +229,12 @@ function toggle_children(){
 		}
 		if($(event.target).prev().attr('class')=='tringle_down'){
 			$(event.target).prev().attr('class','tringle_right');
-		}else{
+		}
+		else if($(event.target).prev().attr('class')=='tringle_right'){
 			$(event.target).prev().attr('class','tringle_down');
 		}
-	}else{
+	}
+	if($(event.target)[0].tagName=='I'){
 		for(var i=0;i<child_div.length;i++){
 			if(child_div[i].style.display=='block'){
 				child_div[i].style.display='none';
@@ -241,7 +244,7 @@ function toggle_children(){
 		}
 		if($(event.target).attr('class')=='tringle_down'){
 			$(event.target).attr('class','tringle_right');
-		}else{
+		}else if($(event.target).attr('class')=='tringle_right'){
 			$(event.target).attr('class','tringle_down');
 		}
 	}
@@ -279,10 +282,11 @@ $('#content_right').on('mouseleave','.item',function(){
 // ！！！ 用 this 优化前面用三个if判断event.target的代码
 // ！！！ 右侧条目里url的内容需要在存进数据库前进行格式限制，同样这里读取时，是不是还要再验证一次？
 // href里面用http还是https，应该如何确定和使用？
-// 左侧部分，小三角右侧添加文件夹打开和关闭的图标
-$('.item').dblclick(function(){
-	// note 这里用 this 可以不用辨别event.target到底是item还是name还是url，这里的this一直是item
+// note 事件绑定问题，还得改成 on()
+$('#content_right').on('dblclick','.item',function(){
+	// note 这里用 this 可以不用辨别event.target 到底是 item 还是 name 还是 url，这里的 this 一直是 item
 	var url=$(this).children('.url').text().substr(5);
+	// var a=$('<a href="http://'+url+'" target="_blank"></a>')[0];
 	var a=$('<a href="http://'+url+'" target="_blank"></a>').get(0);
 	var e=document.createEvent('MouseEvents');
 	e.initEvent('click',true,true);
@@ -290,7 +294,9 @@ $('.item').dblclick(function(){
 });
 
 
+// =============================================================================
 // 下面是右键菜单的代码
+
 
 // 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目
