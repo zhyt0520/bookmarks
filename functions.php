@@ -83,7 +83,7 @@ function echo_left($res){
 function echo_right($res){
 	$response='';
 	for ($i=0;$i<count($res);$i++){
-		$response.='<div class="item" id="db'.$res[$i]['Id'].'"><div class="name">name: '.$res[$i]['Name'].'</div><div class="url">url: '.$res[$i]['Url'].'</div></div>';
+		$response.='<div class="item" id="db'.$res[$i]['Id'].'"><div class="name">'.$res[$i]['Name'].'</div><div class="url">'.$res[$i]['Url'].'</div></div>';
 	}
 	return $response;
 }

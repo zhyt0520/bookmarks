@@ -26,9 +26,10 @@ p{
 
 /*布局*/
 #top{
-	height: 10%;
+	min-height: 50px;
+	height: auto;
 	border: 1px solid #000;
- 	border-bottom: 0px;
+ 	border-bottom: 1px solid transparent;
 }
 #left{
 	width: 200px;
