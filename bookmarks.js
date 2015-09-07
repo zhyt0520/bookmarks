@@ -185,7 +185,6 @@ $(document).mousedown(function(){
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 	}
 	// 右侧鼠标左击条目，改变css
-	// ！！！学习正则表达式，根据资料，去掉css文件里的!important，用js控制css里面的:hover(资料在为知笔记：“jquery获取css中:hover的样式 , 只需要获取”)
 	if((event.which==1 || event.which==3) && $(event.target).closest('.item').length>0){
 		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 		$('.url').css('visibility','hidden');
@@ -280,8 +279,6 @@ $('#content_right').on('mouseleave','.item',function(){
 
 // 双击右侧条目，在新标签页打开相应url
 // ！！！ 用 this 优化前面用三个if判断event.target的代码
-// ！！！ 右侧条目里url的内容需要在存进数据库前进行格式限制，同样这里读取时，是不是还要再验证一次？
-// href里面用http还是https，应该如何确定和使用？
 // note 事件绑定问题，还得改成 on()
 $('#content_right').on('dblclick','.item',function(){
 	// note 这里用 this 可以不用辨别event.target 到底是 item 还是 name 还是 url，这里的 this 一直是 item
