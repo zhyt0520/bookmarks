@@ -184,7 +184,7 @@ $(document).mousedown(function(){
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 	}
-	// 右侧鼠标左击条目，改变css
+	// 右侧鼠标左击或右击url条目，改变css，更新selected_item_db_id
 	if((event.which==1 || event.which==3) && $(event.target).closest('.item').length>0){
 		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 		$('.url').css('visibility','hidden');
@@ -203,12 +203,15 @@ $(document).mousedown(function(){
 			$(event.target).css('visibility','visible');
 			selected_item_db_id=$(event.target).parent().attr('id').substr(2);
 		}
+		console.log(event.target)
 	}
-	// 在右侧空白处单击，更新css,更新当前选中条目id
+	// 在右侧空白处单击，更新之前选中条目的css,更新当前选中条目id，右键菜单禁用删除、新建文件夹
 	if((event.which==1 || event.which==3) && $(event.target).attr('id')=='right'){
 		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 		$('.url').css('visibility','hidden');
 		selected_item_db_id=null;
+		is_enable_contextmenu.remove=false;
+		is_enable_contextmenu.add_folder=false;
 	}
 })
 
@@ -316,6 +319,9 @@ $('#add_url').click(function(){
 		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
+	}else{
+		// 关闭菜单
+		$('#contextmenu').css('display','none');
 	}
 });
 
@@ -338,5 +344,19 @@ $('#add_folder').click(function(){
 		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
+	}else{
+		// 关闭菜单
+		$('#contextmenu').css('display','none');
 	}
-})
+});
+
+
+// 右键菜单条目，删除
+$('#remove').click(function(){
+	if(is_enable_contextmenu.remove){
+
+	}else{
+		// 关闭菜单
+		$('#contextmenu').css('display','none');
+	}
+});
