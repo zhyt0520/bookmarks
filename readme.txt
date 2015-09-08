@@ -1,2 +1,2 @@
 author: zhyt
-author url: aword.net
+author url: http://aword.net
