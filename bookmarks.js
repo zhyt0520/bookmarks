@@ -297,9 +297,8 @@ $('#content_right').on('mouseleave','.item',function(){
 // note 事件绑定问题，还得改成 on()
 $('#content_right').on('dblclick','.item',function(){
 	// note 这里用 this 可以不用辨别event.target 到底是 item 还是 name 还是 url，这里的 this 一直是 item
-	var url=$(this).children('.url').text().substr(5);
-	// var a=$('<a href="http://'+url+'" target="_blank"></a>')[0];
-	var a=$('<a href="http://'+url+'" target="_blank"></a>').get(0);
+	var url=$(this).children('.url').text();
+	var a=$('<a href="http://'+url+'" target="_blank"></a>')[0];
 	var e=document.createEvent('MouseEvents');
 	e.initEvent('click',true,true);
 	a.dispatchEvent(e);
