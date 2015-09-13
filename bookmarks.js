@@ -20,7 +20,6 @@ var is_enable_contextmenu={
 	add_folder:true
 }
 
-
 // 竖分隔线拖动
 document.getElementById('line').onmousedown = function(){
 	var old_width = document.getElementById('left').offsetWidth;
@@ -39,7 +38,6 @@ document.getElementById('line').onmousedown = function(){
 document.onmouseup = function(){
 	document.onmousemove = null;
 }
-
 
 // 页面内鼠标按下事件
 $(document).mousedown(function(){
@@ -138,14 +136,12 @@ $(document).mousedown(function(){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-		// 若鼠标右击对象为<p class='dir'>，则把对象的id数字赋给selected_dir_db_id
+		// 若鼠标右击对象为<p class='dir'>，则把对象的 id 数字赋给 selected_dir_db_id
 		if($(event.target).attr('class')=='dir'){
 			$('.dir').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 			selected_dir_db_id=$(event.target).attr('id').substr(2);
 		// 否则是在左侧空白处右击，当前选中id应为0
-		}else{
-			selected_dir_db_id=0;
 		}
 		// 获得点击对象的目录深度，控制右键菜单添加文件夹的功能，和条目文字颜色显示
 		var tree=$(event.target).parent().attr('class');
@@ -183,11 +179,26 @@ $(document).mousedown(function(){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
+		is_enable_contextmenu.add_url=true;
+		if(is_enable_contextmenu.add_url){
+			$('#add_url').css('color','rgb(0,0,0)');
+		}else{
+			$('#add_url').css('color','rgb(183,183,183)');
+		}
 	}
 	// 右侧鼠标左击或右击url条目，改变css，更新selected_item_db_id
 	if((event.which==1 || event.which==3) && $(event.target).closest('.item').length>0){
+		// enable 右键菜单的删除功能
+		is_enable_contextmenu.remove=true;
+		if(is_enable_contextmenu.remove){
+			$('#remove').css('color','rgb(0,0,0)');
+		}else{
+			$('#remove').css('color','rgb(183,183,183)');
+		}
+		// 去除所有条目的边框和背景效果
 		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
 		$('.url').css('visibility','hidden');
+		// 给选中条目添加边框和背景效果
 		if($(event.target).attr('class')=='item'){
 			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 			$(event.target).children('.url').css('visibility','visible');
@@ -203,7 +214,6 @@ $(document).mousedown(function(){
 			$(event.target).css('visibility','visible');
 			selected_item_db_id=$(event.target).parent().attr('id').substr(2);
 		}
-		console.log(event.target)
 	}
 	// 在右侧空白处单击，更新之前选中条目的css,更新当前选中条目id，右键菜单禁用删除、新建文件夹
 	if((event.which==1 || event.which==3) && $(event.target).attr('id')=='right'){
@@ -211,10 +221,14 @@ $(document).mousedown(function(){
 		$('.url').css('visibility','hidden');
 		selected_item_db_id=null;
 		is_enable_contextmenu.remove=false;
+		if(is_enable_contextmenu.remove){
+			$('#remove').css('color','rgb(0,0,0)');
+		}else{
+			$('#remove').css('color','rgb(183,183,183)');
+		}
 		is_enable_contextmenu.add_folder=false;
 	}
 })
-
 
 // 左侧小三角单击、左侧目录双击，显示和隐藏子目录
 // note 该函数至于$(document).mousedown(function(){之前的话，会导致其内部的单击事件被屏蔽，放在其后面，则双击事件会分别执行一次单击和双击
@@ -252,7 +266,6 @@ function toggle_children(){
 	}
 }
 
-
 // 右侧用鼠标hover控制url显示状态
 // 最开始的时候用原始javascript，html里写事件，传递参数this，js的函数里只一句就够了。改了jq，mouse的事件受内部div影响，用了三个if。。。
 // note 直接用mouseenter和mouseleave的话，ajax更新后事件失效。学习jq的bind, live, delegate, on区别
@@ -266,7 +279,7 @@ $('#content_right').on('mouseenter','.item',function(){
 	if($(event.target).attr('class')=='url'){
 		$(event.target).css('visibility','visible');
 	}
-	});
+});
 $('#content_right').on('mouseleave','.item',function(){
 	if($(event.target).attr('class')=='item' && $(event.target).attr('id').substr(2)!=selected_item_db_id){
 		$(event.target).children('.url').css('visibility','hidden');
@@ -277,8 +290,7 @@ $('#content_right').on('mouseleave','.item',function(){
 	if($(event.target).attr('class')=='url' && $(event.target).parent().attr('id').substr(2)!=selected_item_db_id){
 		$(event.target).css('visibility','hidden');
 	}
-	});
-
+});
 
 // 双击右侧条目，在新标签页打开相应url
 // ！！！ 用 this 优化前面用三个if判断event.target的代码
@@ -293,10 +305,8 @@ $('#content_right').on('dblclick','.item',function(){
 	a.dispatchEvent(e);
 });
 
-
-// =============================================================================
+// ===========================================================================
 // 下面是右键菜单的代码
-
 
 // 右键菜单条目，添加网页
 // 若左侧有当前选中目录，新建条目
@@ -325,7 +335,6 @@ $('#add_url').click(function(){
 	}
 });
 
-
 // 右键菜单条目，添加文件夹
 // 获取点击事件目标的数据库id和depth，新建新文件夹
 $('#add_folder').click(function(){
@@ -350,11 +359,19 @@ $('#add_folder').click(function(){
 	}
 });
 
-
 // 右键菜单条目，删除
 $('#remove').click(function(){
 	if(is_enable_contextmenu.remove){
-
+		// 用ajax传递数据 id 给 ajax.php
+		$.post('ajax.php',{'mark':'remove','id':selected_item_db_id,},function(response,status,xhr){
+			// 如果失败，打印错误信息
+			if(status=='error'){
+				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
+			}
+		})
+		$('#db'+selected_item_db_id).remove();
+		// 关闭菜单
+		$('#contextmenu').css('display','none');
 	}else{
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
