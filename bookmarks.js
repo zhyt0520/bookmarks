@@ -325,6 +325,9 @@ $('#add_url').click(function(){
 			new_form.appendChild(new_name);
 			new_form.appendChild(new_url);
 			document.getElementById('content_right').appendChild(new_form);
+			new_name.focus();
+		}else{
+			$('#input_name').focus();
 		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
@@ -343,12 +346,16 @@ $('#add_folder').click(function(){
 		if($('#new_folder').length==0){
 			// 左侧内容空白处右击
 			if(selected_db_depth==-1){
-				$('#content_left').append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+				$('#content_left').append('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹"/></form>');
+				$('#input_folder').focus();
 			// 左侧文件夹上右击
 			}else{
-				$('#db'+selected_dir_db_id).parent().children().last().after('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹" /></form>')
+				$('#db'+selected_dir_db_id).parent().children().last().after('<form class="tree'+(selected_db_depth+1)+'" id="new_folder"><input id="input_folder" placeholder="新建文件夹"/></form>')
 				$('#new_folder').css('display','block');
+				$('#input_folder').focus();
 			}
+		}else{
+			$('#input_folder').focus();
 		}
 		// 关闭菜单
 		$('#contextmenu').css('display','none');
