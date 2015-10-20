@@ -100,6 +100,9 @@ $(document).mousedown(function(){
 			// 数据库返回最近一次插入数据的id
 			last_insert_id=response;
 		})
+		
+		// !!! 左侧跟目录新建文件夹有问题
+
 		// 显示当前点击目录的左侧的三角
 		if($('#db'+selected_dir_db_id).prev().css('visibility')=='hidden'){
 			$('#db'+selected_dir_db_id).prev().css('visibility','visible');
@@ -142,6 +145,8 @@ $(document).mousedown(function(){
 			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
 			selected_dir_db_id=$(event.target).attr('id').substr(2);
 		// 否则是在左侧空白处右击，当前选中id应为0
+		}else{
+			selected_dir_db_id=0;
 		}
 		// 获得点击对象的目录深度，控制右键菜单添加文件夹的功能，和条目文字颜色显示
 		var tree=$(event.target).parent().attr('class');
@@ -179,7 +184,7 @@ $(document).mousedown(function(){
 		var x=event.clientX;
 		var y=event.clientY;
 		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-		is_enable_contextmenu.add_url=true;
+		// is_enable_contextmenu.add_url=true;
 		if(is_enable_contextmenu.add_url){
 			$('#add_url').css('color','rgb(0,0,0)');
 		}else{
