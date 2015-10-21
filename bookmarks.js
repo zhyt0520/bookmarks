@@ -47,7 +47,7 @@ $(document).mousedown(function(){
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
 	// 控制右键菜单添加网页条目的功能
-	// 若左侧有当前选中目录selected_dir_db_id>0，enable添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
+	// 若左侧有当前选中目录 selected_dir_db_id>0， enable 添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
 	if(selected_dir_db_id>0){
 		is_enable_contextmenu.add_url=true;
 		$('#add_url').css('color','rgb(0,0,0)');
@@ -87,33 +87,9 @@ $(document).mousedown(function(){
 		$('#new_folder').remove();
 	}
 	// 页面内左击，完成新建文件夹
-	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹form，folder表单数据不为空，则数据传给ajax.php，关闭新建文件夹form，显示新建结果
+	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹 form， folder 表单数据不为空，则数据传给 ajax.php，关闭新建文件夹 form，显示新建结果
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
-		var folder=$('#input_folder').val();
-		var last_insert_id;
-		// 用ajax传递数据id,depth,folder给ajax.php
-		$.post('ajax.php',{'mark':'new_folder','id':selected_dir_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
-			// 如果失败，打印错误信息
-			if(status=='error'){
-				console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
-			}
-			// 数据库返回最近一次插入数据的id
-			last_insert_id=response;
-		})
-		// 显示当前点击目录的左侧的三角
-		if($('#db'+selected_dir_db_id).prev().css('visibility')=='hidden'){
-			$('#db'+selected_dir_db_id).prev().css('visibility','visible');
-		}
-		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="folder_only" onclick="toggle_children()"></i><p class="dir" id="db'+last_insert_id+'" ondblclick=toggle_children()">'+folder+'</p></div>';
-		if(selected_dir_db_id>0){
-			$('#db'+selected_dir_db_id).parent().children().last().after(new_folder_html);
-			$('#db'+selected_dir_db_id).parent().children().last().css('display','block');
-		}else{
-			// selected_dir_db=0,在最末添加新建文件夹
-			$('#content_left').children().last().after(new_folder_html);
-			$('#content_left').children().last().css('display','block');
-		}
-		$('#new_folder').remove();
+		complete_new_folder();
 	}
 
 	// 二、左侧
@@ -311,6 +287,42 @@ $('#content_right').on('dblclick','.item',function(){
 	e.initEvent('click',true,true);
 	a.dispatchEvent(e);
 });
+
+// 完成左侧新建目录的函数
+function complete_new_folder(){
+	var folder=$('#input_folder').val();
+	var last_insert_id;
+	// 用ajax传递数据id,depth,folder给ajax.php
+	$.post('ajax.php',{'mark':'new_folder','id':selected_dir_db_id,'depth':selected_db_depth,'folder':folder},function(response,status,xhr){
+		// 如果失败，打印错误信息
+		if(status=='error'){
+			console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
+		}
+		// 数据库返回最近一次插入数据的id
+		last_insert_id=response;
+	})
+	// 显示当前选中目录的左侧的三角
+	if($('#db'+selected_dir_db_id).prev().attr('class')=='folder_only'){
+		$('#db'+selected_dir_db_id).prev().attr('class','tringle_down');
+	}
+	var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="folder_only" onclick="toggle_children()"></i><p class="dir" id="db'+last_insert_id+'" ondblclick=toggle_children()">'+folder+'</p></div>';
+	if(selected_dir_db_id>0){
+		$('#db'+selected_dir_db_id).parent().children().last().after(new_folder_html);
+		$('#db'+selected_dir_db_id).parent().children().last().css('display','block');
+	}else{
+		// selected_dir_db=0,在最末添加新建文件夹
+		$('#content_left').children().last().after(new_folder_html);
+		$('#content_left').children().last().css('display','block');
+	}
+	$('#new_folder').remove();
+}
+
+// 用回车键完成新建文件夹
+$('#content_left').on('keydown','#input_folder',function(){
+	if(event.keyCode==13 && $('#input_folder').val()){
+		complete_new_folder();
+	}
+})
 
 // ===========================================================================
 // 下面是右键菜单的代码
