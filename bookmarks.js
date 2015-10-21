@@ -99,6 +99,8 @@ $(document).mousedown(function(){
 			}
 			// 数据库返回最近一次插入数据的id
 			last_insert_id=response;
+			// !!! ajax里面的select last_insert_id()查询貌似有问题
+			console.log(last_insert_id)
 		})
 		
 		// !!! 左侧跟目录新建文件夹有问题
@@ -107,9 +109,15 @@ $(document).mousedown(function(){
 		if($('#db'+selected_dir_db_id).prev().css('visibility')=='hidden'){
 			$('#db'+selected_dir_db_id).prev().css('visibility','visible');
 		}
-		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="iconfont icon-xiangyou" onclick="toggle_children()" style="visibility:hidden"></i><p class="dir" id="db'+last_insert_id+'" onclick="left_dir_click('+last_insert_id+','+(selected_db_depth+1)+')">'+folder+'</p></div>';
-		$('#db'+selected_dir_db_id).parent().children().last().after(new_folder_html);
-		$('#db'+selected_dir_db_id).parent().children().last().css('display','block');
+		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="folder_only" onclick="toggle_children()"></i><p class="dir" id="db'+last_insert_id+'" ondblclick=toggle_children()"</p></div>';
+		if(selected_dir_db_id>0){
+			$('#db'+selected_dir_db_id).parent().children().last().after(new_folder_html);
+			$('#db'+selected_dir_db_id).parent().children().last().css('display','block');
+		}else{
+			// selected_dir_db=0,在最末添加新建文件夹
+			$('#content_left').children().last().after(new_folder_html);
+			$('#content_left').children().last().css('display','block');
+		}
 		$('#new_folder').remove();
 	}
 
