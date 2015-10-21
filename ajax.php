@@ -55,8 +55,9 @@ if(isset($_REQUEST['mark'],$_REQUEST['id'],$_REQUEST['depth'],$_REQUEST['folder'
 	$result=$conn->prepare($query);
 	$result->execute();
 	// 查询最近一次插入数据的id
-	$result=$conn->query('select last_insert_id()');
-	echo $result;
+	$result=$conn->query('select max(Id) from bookmarks');
+	$res=$result->fetchColumn();
+	echo $res;
 }
 
 // 删除

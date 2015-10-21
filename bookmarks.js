@@ -99,17 +99,12 @@ $(document).mousedown(function(){
 			}
 			// 数据库返回最近一次插入数据的id
 			last_insert_id=response;
-			// !!! ajax里面的select last_insert_id()查询貌似有问题
-			console.log(last_insert_id)
 		})
-		
-		// !!! 左侧跟目录新建文件夹有问题
-
 		// 显示当前点击目录的左侧的三角
 		if($('#db'+selected_dir_db_id).prev().css('visibility')=='hidden'){
 			$('#db'+selected_dir_db_id).prev().css('visibility','visible');
 		}
-		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="folder_only" onclick="toggle_children()"></i><p class="dir" id="db'+last_insert_id+'" ondblclick=toggle_children()"</p></div>';
+		var new_folder_html='<div class="tree'+(selected_db_depth+1)+'"><i class="folder_only" onclick="toggle_children()"></i><p class="dir" id="db'+last_insert_id+'" ondblclick=toggle_children()">'+folder+'</p></div>';
 		if(selected_dir_db_id>0){
 			$('#db'+selected_dir_db_id).parent().children().last().after(new_folder_html);
 			$('#db'+selected_dir_db_id).parent().children().last().css('display','block');
