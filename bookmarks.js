@@ -200,7 +200,9 @@ $('#content_right').on({
 		$(this).children('.url').css('visibility','visible');
 	},
 	mouseleave:function(){
-		$(this).children('.url').css('visibility','hidden');
+		if($(this).attr('id').substr(2)!=selected_item_db_id){
+			$(this).children('.url').css('visibility','hidden');
+		}
 	},
 	// 右侧鼠标左击或右击url条目，改变css，更新selected_item_db_id
 	mousedown:function(){
@@ -216,6 +218,7 @@ $('#content_right').on({
 		$('.url').css('visibility','hidden');
 		// 给选中条目添加边框和背景效果
 		$(this).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+		$(this).children('.url').css('visibility','visible');
 		selected_item_db_id=$(this).attr('id').substr(2);
 	},
 	// 双击右侧条目，在新标签页打开相应url
