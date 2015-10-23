@@ -43,7 +43,6 @@ document.onmouseup = function(){
 $(document).mousedown(function(){
 
 	// 零、无位置
-
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
 	// 控制右键菜单添加网页条目的功能
@@ -57,36 +56,29 @@ $(document).mousedown(function(){
 	}
 
 	// 一、整个页面
-
 	// 页面内左击，关闭右键菜单
-	// 若鼠标左键按下，且点击事件的父元素无右键菜单，关闭菜单
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0){
 		$('#contextmenu').css('display','none');
 	}
 	// 页面内左击，删除新建条目
-	// 若鼠标左键按下，新建条目存在，url表单内容为空，点击事件的父元素无右键菜单、无新建条目，删除新建条目
 	if(event.which==1 && $('#new_item') && $('#input_url').val()=='' && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_item').length==0){
 		$('#new_item').remove();
 	}
 	// 页面内左击，完成新建条目
-	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建条目，name表单数据不为空,url表单数据不为空，则数据传给ajax.php，关闭新建条目，显示新建结果
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_item').length==0 && $('#input_name').val() && $('#input_url').val()){
 		complete_new_item();
 	}
 	// 页面内左击，删除新建文件夹form
-	// 若鼠标左键按下，新建文件夹form存在，input_folder表单内容为空，点击事件的父元素无右键菜单、无新建文件夹form，删除新建文件夹form
 	if(event.which==1 && $('#new_folder') && $('#input_folder').val()=='' && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0){
 		$('#new_folder').remove();
 	}
 	// 页面内左击，完成新建文件夹
-	// 若鼠标左键按下，点击事件父元素无右键菜单、无新建文件夹 form， folder 表单数据不为空，则数据传给 ajax.php，关闭新建文件夹 form，显示新建结果
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
 		complete_new_folder();
 	}
 
 	// 二、左侧
-
-	// 左侧鼠标右击，出现自定义右键菜单
+	// 左侧,鼠标右击，出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#left').length>0){
 		var x=event.clientX;
 		var y=event.clientY;
@@ -129,9 +121,7 @@ $(document).mousedown(function(){
 	}
 
 	// 三、右侧
-
-	// 右侧鼠标右击,出现自定义右键菜单
-	// 若鼠标右键按下，且点击事件的父元素有#right（即在右侧div内部点击的鼠标右键），获取鼠标位置并赋给右键菜单div
+	// 右侧,鼠标右击,出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#right').length>0){
 		var x=event.clientX;
 		var y=event.clientY;
@@ -142,48 +132,6 @@ $(document).mousedown(function(){
 		}else{
 			$('#add_url').css('color','rgb(183,183,183)');
 		}
-	}
-	// 右侧鼠标左击或右击url条目，改变css，更新selected_item_db_id
-	if((event.which==1 || event.which==3) && $(event.target).closest('.item').length>0){
-		// enable 右键菜单的删除功能
-		is_enable_contextmenu.remove=true;
-		if(is_enable_contextmenu.remove){
-			$('#remove').css('color','rgb(0,0,0)');
-		}else{
-			$('#remove').css('color','rgb(183,183,183)');
-		}
-		// 去除所有条目的边框和背景效果
-		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
-		$('.url').css('visibility','hidden');
-		// 给选中条目添加边框和背景效果
-		if($(event.target).attr('class')=='item'){
-			$(event.target).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
-			$(event.target).children('.url').css('visibility','visible');
-			selected_item_db_id=$(event.target).attr('id').substr(2);
-		}
-		if($(event.target).attr('class')=='name'){
-			$(event.target).parent().css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
-			$(event.target).siblings('.url').css('visibility','visible');
-			selected_item_db_id=$(event.target).parent().attr('id').substr(2);
-		}
-		if($(event.target).attr('class')=='url'){
-			$(event.target).parent().css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
-			$(event.target).css('visibility','visible');
-			selected_item_db_id=$(event.target).parent().attr('id').substr(2);
-		}
-	}
-	// 在右侧空白处单击，更新之前选中条目的css,更新当前选中条目id，右键菜单禁用删除、新建文件夹
-	if((event.which==1 || event.which==3) && $(event.target).attr('id')=='right'){
-		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
-		$('.url').css('visibility','hidden');
-		selected_item_db_id=null;
-		is_enable_contextmenu.remove=false;
-		if(is_enable_contextmenu.remove){
-			$('#remove').css('color','rgb(0,0,0)');
-		}else{
-			$('#remove').css('color','rgb(183,183,183)');
-		}
-		is_enable_contextmenu.add_folder=false;
 	}
 })
 
@@ -207,11 +155,9 @@ $('#content_left').on('click','p',function(){
 	selected_item_db_id=null;
 });
 
-// 左侧小三角单击、左侧目录双击，显示和隐藏子目录
+// 左侧单击三角、双击目录，显示和隐藏子目录
 // note 该函数至于 $(document).mousedown(function(){ 之前的话，会导致其内部的单击事件被屏蔽，放在其后面，则双击事件会分别执行一次单击和双击
-
 // ！！！ 代码需要优化，有空再改
-
 function toggle_children(){
 	var child_div=$(event.target).parent().children('div');
 	// 切换子目录是否显示
@@ -246,27 +192,41 @@ function toggle_children(){
 	}
 }
 
-// 右侧用鼠标hover控制url显示状态
+// 右侧条目的鼠标事件
 // note 用 on 绑定多个事件的写法，如果绑定多个选择器，全部跟 .item 写到一组引号内
 $('#content_right').on({
+	// 右侧用鼠标hover控制url显示状态
 	mouseenter:function(){
 		$(this).children('.url').css('visibility','visible');
 	},
 	mouseleave:function(){
 		$(this).children('.url').css('visibility','hidden');
 	},
+	// 右侧鼠标左击或右击url条目，改变css，更新selected_item_db_id
+	mousedown:function(){
+		// enable 右键菜单的删除功能
+		is_enable_contextmenu.remove=true;
+		if(is_enable_contextmenu.remove){
+			$('#remove').css('color','rgb(0,0,0)');
+		}else{
+			$('#remove').css('color','rgb(183,183,183)');
+		}
+		// 去除所有条目的边框和背景效果
+		$('.item').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+		$('.url').css('visibility','hidden');
+		// 给选中条目添加边框和背景效果
+		$(this).css({'border':'1px solid rgb(84,155,247)','background':'rgb(218,233,254)'});
+		selected_item_db_id=$(this).attr('id').substr(2);
+	},
+	// 双击右侧条目，在新标签页打开相应url
+	dblclick:function(){
+		var url=$(this).children('.url').text();
+		var a=$('<a href="http://'+url+'" target="_blank"></a>')[0];
+		var e=document.createEvent('MouseEvents');
+		e.initEvent('click',true,true);
+		a.dispatchEvent(e);
+	},
 },'.item');
-
-// 双击右侧条目，在新标签页打开相应url
-// note 事件绑定问题，还得改成 on()
-$('#content_right').on('dblclick','.item',function(){
-	// note 这里用 this 可以不用辨别event.target 到底是 item 还是 name 还是 url，这里的 this 一直是 item
-	var url=$(this).children('.url').text();
-	var a=$('<a href="http://'+url+'" target="_blank"></a>')[0];
-	var e=document.createEvent('MouseEvents');
-	e.initEvent('click',true,true);
-	a.dispatchEvent(e);
-});
 
 // 完成右侧新建条目的函数
 function complete_new_item(){
@@ -354,10 +314,8 @@ $('#add_url').click(function(){
 		}else{
 			$('#input_name').focus();
 		}
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}else{
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}
 });
@@ -382,10 +340,8 @@ $('#add_folder').click(function(){
 		}else{
 			$('#input_folder').focus();
 		}
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}else{
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}
 });
@@ -401,10 +357,8 @@ $('#remove').click(function(){
 			}
 		})
 		$('#db'+selected_item_db_id).remove();
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}else{
-		// 关闭菜单
 		$('#contextmenu').css('display','none');
 	}
 });
