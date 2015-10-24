@@ -17,7 +17,7 @@ var is_enable_contextmenu={
 	remove:false,
 	rename:false,
 	add_url:false,
-	add_folder:true
+	add_folder:true,
 }
 
 // 竖分隔线拖动
@@ -42,7 +42,7 @@ document.onmouseup = function(){
 // 页面内鼠标按下事件
 $(document).mousedown(function(){
 
-	// 零、无位置
+	// 位置：无位置
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
 	// 控制右键菜单添加网页条目的功能
@@ -55,7 +55,7 @@ $(document).mousedown(function(){
 		$('#add_url').css('color','rgb(183,183,183)');
 	}
 
-	// 一、整个页面
+	// 位置：整个页面
 	// 页面内左击，关闭右键菜单
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0){
 		$('#contextmenu').css('display','none');
@@ -76,13 +76,16 @@ $(document).mousedown(function(){
 	if(event.which==1 && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('#new_folder').length==0 && $('#input_folder').val()){
 		complete_new_folder();
 	}
+	// 空白处单击，取消 selected_item_db_id 的选择
+	if((event.which==1 || event.which==3) && $(event.target).closest('#contextmenu').length==0 && $(event.target).closest('.item').length==0){
+		$('#db'+selected_item_db_id).css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
+		$('#db'+selected_item_db_id).children('.url').css('visibility','hidden');
+		selected_item_db_id=null;
+	}
 
-	// 二、左侧
+	// 位置：左侧
 	// 左侧,鼠标右击，出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#left').length>0){
-		var x=event.clientX;
-		var y=event.clientY;
-		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 		// 若鼠标右击对象为<p class='dir'>，则把对象的 id 数字赋给 selected_dir_db_id
 		if($(event.target).attr('class')=='dir'){
 			$('.dir').css({'border':'1px solid transparent','background':'rgb(255,255,255)'});
@@ -120,20 +123,24 @@ $(document).mousedown(function(){
 		selected_item_db_id=null;
 	}
 
-	// 三、右侧
+	// 位置：右侧
 	// 右侧,鼠标右击,出现自定义右键菜单
 	if(event.which==3 && $(event.target).closest('#right').length>0){
+	}
+
+	// 位置：左侧或者右侧
+	// 鼠标右击，显示自定义右键菜单
+	if(event.which==3 && ($(event.target).closest('#left').length>0 || $(event.target).closest('#right').length>0)){
 		var x=event.clientX;
 		var y=event.clientY;
-		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
-		// is_enable_contextmenu.add_url=true;
-		if(is_enable_contextmenu.add_url){
-			$('#add_url').css('color','rgb(0,0,0)');
-		}else{
-			$('#add_url').css('color','rgb(183,183,183)');
+		// 循环 is_enable_contextmenu 的属性，控制右键菜单 css
+		for(property in is_enable_contextmenu){
+			is_enable_contextmenu[property] ? $('#'+property).css('color','rgb(0,0,0)') : $('#'+property).css('color','rgb(183,183,183)');
 		}
+		// !!! 需要调整菜单的显示位置
+		$('#contextmenu').css({'left':x+'px','top':y+'px','display':'block'});
 	}
-})
+});
 
 // 左侧鼠标左击目录，更新右侧的内容显示，改变css，更新全局变量
 $('#content_left').on('click','p',function(){
@@ -287,6 +294,8 @@ $('#content_right').on('keydown','#input_url',function(){
 // 用回车键完成新建文件夹
 $('#content_left').on('keydown','#input_folder',function(){
 	if(event.keyCode==13 && $('#input_folder').val()){
+		// form 下单个 input 时回车键会执行 form 提交，用 event.preventDefault() 方法阻止元素发生默认的行为
+		event.preventDefault();
 		complete_new_folder();
 	}
 });
