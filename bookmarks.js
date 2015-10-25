@@ -45,15 +45,6 @@ $(document).mousedown(function(){
 	// 位置：无位置
 	// 屏蔽系统右键菜单
 	document.oncontextmenu=function(){return false}
-	// 控制右键菜单添加网页条目的功能
-	// 若左侧有当前选中目录 selected_dir_db_id>0， enable 添加网页功能，右键菜单对应条目黑色，否则对应条目灰色
-	if(selected_dir_db_id>0){
-		is_enable_contextmenu.add_url=true;
-		$('#add_url').css('color','rgb(0,0,0)');
-	}else{
-		is_enable_contextmenu.add_url=false;
-		$('#add_url').css('color','rgb(183,183,183)');
-	}
 
 	// 位置：整个页面
 	// 页面内左击，关闭右键菜单
@@ -164,6 +155,7 @@ $('#content_left').on('click','p',function(){
 
 // 左侧单击三角、双击目录，显示和隐藏子目录
 // note 该函数至于 $(document).mousedown(function(){ 之前的话，会导致其内部的单击事件被屏蔽，放在其后面，则双击事件会分别执行一次单击和双击
+
 // ！！！ 代码需要优化，有空再改
 function toggle_children(){
 	var child_div=$(event.target).parent().children('div');
@@ -260,9 +252,7 @@ function complete_new_folder(){
 		if(status=='error'){
 			console.log('xhr.status: '+xhr.status+', xhr.statusText: '+xhr.statusText)
 		}
-
 		// note 下面这部分代码必须放到 post 的回调函数内部，否则会先于 post 执行，造成 response 无法赋值给 new_folder_html
-
 		// 数据库返回最近一次插入数据的id
 		var last_insert_id=response;
 		// 显示当前选中目录的左侧的三角
