@@ -4,7 +4,7 @@
 function connect_db(){
 	$dsn='mysql:host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME;
 	try{
-		$conn = new PDO ($dsn,DB_USER,DB_PASSWORD);
+		$conn=new PDO ($dsn,DB_USER,DB_PASSWORD);
 	}
 	catch(PDOException $e)
 	{
@@ -12,18 +12,17 @@ function connect_db(){
 	}
 	if(isset($conn)){
 		// 若数据表DB_TABLE不存在，创建数据表
-		if (!$conn->query('show tables like '.DB_TABLE)){
-			$query='create table bookmarks ('.
-				'Id int not null auto_increment,'.
-				'Depth int not null,'.
-				'ParentId int not null,'.
-				'IsDir int not null,'.
-				'Name varchar(100) not null,'.
-				'Url varchar(255),'.
-				'primary key(Id));';
-			$result=$conn->prepare($query);
-			$result->execute();
-		}
+		$query='create table if not exists '.DB_TABLE.' ('.
+			'Id int not null auto_increment,'.
+			'Depth int not null,'.
+			'ParentId int not null,'.
+			'IsDir int not null,'.
+			'Name varchar(100) not null,'.
+			'Url varchar(255),'.
+			'primary key(Id)) '.
+			'default charset utf8;';
+		$result=$conn->prepare($query);
+		$result->execute();
 		return $conn;
 	}
 }

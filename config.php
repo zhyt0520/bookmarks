@@ -12,10 +12,10 @@
 
 // 定义数据库信息
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'test');
+define('DB_NAME', 'bookmarks');
 define('DB_PORT', 3306);
 define('DB_TABLE','bookmarks');
-define('DB_USER', 'test');
+define('DB_USER', 'bookmarks');
 define('DB_PASSWORD', '123456');
 
 ?>
